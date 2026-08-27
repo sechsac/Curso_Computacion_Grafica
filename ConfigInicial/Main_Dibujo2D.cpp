@@ -99,6 +99,9 @@ int main() {
 		0.27f, -0.75f, 0.0f,	0.5f,1.0f,0.0f,	// 29
 		0.2f, -0.85f, 0.0f,	0.5f,1.0f,0.0f,	// 30
 
+		-0.45f, -0.07f, 0.0f, 	0.5f,1.0f,0.0f,	// 31
+		0.45f, -0.07f, 0.0f, 	0.5f,1.0f,0.0f,	// 32
+
 	};
 
 	// Secuencias de vértices no signados
@@ -109,12 +112,12 @@ int main() {
 		18,20,
 		20,22,
 		22,24,
-		20,6,
+		30,6,
 		5,3,
 		24,26,
 		27,29,
 		5,28,
-		6,21,
+		6,31,
 		3,19,
 		19,21,
 		21,23,
@@ -134,7 +137,9 @@ int main() {
 		15,16,
 		15,17,
 		4,6,
-		1,6
+		1,6,
+		30,20,
+		21,31
 	};
 
 
@@ -222,6 +227,8 @@ int main() {
 		glDrawArrays(GL_POINTS, 27, 1);
 		glDrawArrays(GL_POINTS, 28, 1);
 		glDrawArrays(GL_POINTS, 29, 1);
+		glDrawArrays(GL_POINTS, 30, 1);
+		glDrawArrays(GL_POINTS, 31, 1);
 
 
 		// Para dibujar una linea (sólo toma en cuenta la unión de dos vértices)
@@ -255,7 +262,7 @@ int main() {
 		
 		// Dibuja por elementos, no por arreglos
 		// Para dibujar elementos sin que sean contiguos
-        glDrawElements(GL_LINES,64,GL_UNSIGNED_INT,0); // figura por dibujar
+        glDrawElements(GL_LINES,68,GL_UNSIGNED_INT,0); // figura por dibujar
 														  // tamaño de la figura
 														  // elementos no signados de tipo entero
 														  // desde dónde se leen los índices
