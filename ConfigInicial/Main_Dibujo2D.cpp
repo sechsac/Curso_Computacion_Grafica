@@ -103,10 +103,24 @@ int main() {
 
 	// Secuencias de vértices no signados
 	unsigned int indices[] = {  // note that we start from 0!
-		0,1,3,
-		3,2,1,// second Triangle
-		0,1,3,
-		
+		0,18,
+		0,2,
+		2,25,
+		18,20,
+		20,22,
+		22,24,
+		20,6,
+		5,3,
+		24,26,
+		27,29,
+		5,28,
+		6,21,
+		3,19,
+		19,21,
+		21,23,
+		23,27,
+		16,29,
+		17,26
 	};
 
 
@@ -203,7 +217,19 @@ int main() {
 		// Para dibujar el cuadrado completo (hace todas las líneas)
 		//glDrawArrays(GL_LINE_LOOP,0,4);
 
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		
+		glDrawArrays(GL_LINES, 0, 2);
+		glDrawArrays(GL_LINES, 1, 2);
+		glDrawArrays(GL_LINES, 3, 2);
+		glDrawArrays(GL_LINES, 4, 2);
+
+		glDrawArrays(GL_LINES, 24, 2);
+		glDrawArrays(GL_LINES, 25, 2);
+		glDrawArrays(GL_LINES, 27, 2);
+		glDrawArrays(GL_LINES, 28, 2);
+
+		//glDrawArrays(GL_TRIANGLES, 3, 3);
+
         
 		// Para dibujar triángulos
         //glDrawArrays(GL_TRIANGLES,0,3); // a partir de qué elemento del arreglo va a dibujar
@@ -211,11 +237,12 @@ int main() {
 		
 		// Dibuja por elementos, no por arreglos
 		// Para dibujar elementos sin que sean contiguos
-        //glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,0); // figura por dibujar
+        glDrawElements(GL_LINES,36,GL_UNSIGNED_INT,0); // figura por dibujar
 														  // tamaño de la figura
 														  // elementos no signados de tipo entero
 														  // desde dónde se leen los índices
 
+		//glDrawElements(GL_LINES,2,GL_UNSIGNED_INT,1);
         
         
         glBindVertexArray(0);
