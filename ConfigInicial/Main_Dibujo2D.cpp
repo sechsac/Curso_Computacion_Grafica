@@ -73,8 +73,8 @@ int main() {
 		0.67f,  0.75f, 0.0f,   0.0f,0.0f,1.0f,	// 6
 
 		0.0f, 0.2f, 0.0f,		0.0f,0.5f,0.0f,	// 7
-		0.06f, 0.25f, 0.0f,		0.5f,0.5f,0.5f,	// 8
-		-0.06f, 0.25f, 0.0f,		0.5f,0.5f,0.5f,	// 9
+		0.06f, 0.45f, 0.0f,		0.5f,0.5f,0.5f,	// 8
+		-0.06f, 0.45f, 0.0f,		0.5f,0.5f,0.5f,	// 9
 		0.0f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 10
 		0.025f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 11
 		-0.025f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 12
@@ -120,7 +120,21 @@ int main() {
 		21,23,
 		23,27,
 		16,29,
-		17,26
+		17,26,
+		6,8,
+		6,10,
+		6,11,
+		6,9,
+		10,13,
+		9,12,
+		11,14,
+		13,16,
+		14,17, //27
+		12,15,
+		15,16,
+		15,17,
+		4,6,
+		1,6
 	};
 
 
@@ -228,6 +242,10 @@ int main() {
 		glDrawArrays(GL_LINES, 27, 2);
 		glDrawArrays(GL_LINES, 28, 2);
 
+		glDrawArrays(GL_LINES, 13, 3);
+		glDrawArrays(GL_LINES, 10, 3);
+		glDrawArrays(GL_LINES, 6, 2);
+
 		//glDrawArrays(GL_TRIANGLES, 3, 3);
 
         
@@ -237,7 +255,7 @@ int main() {
 		
 		// Dibuja por elementos, no por arreglos
 		// Para dibujar elementos sin que sean contiguos
-        glDrawElements(GL_LINES,36,GL_UNSIGNED_INT,0); // figura por dibujar
+        glDrawElements(GL_LINES,64,GL_UNSIGNED_INT,0); // figura por dibujar
 														  // tamaño de la figura
 														  // elementos no signados de tipo entero
 														  // desde dónde se leen los índices
