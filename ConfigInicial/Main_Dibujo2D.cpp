@@ -75,13 +75,13 @@ int main() {
 		0.0f, 0.2f, 0.0f,		0.0f,0.5f,0.0f,	// 7
 		0.06f, 0.45f, 0.0f,		0.5f,0.5f,0.5f,	// 8
 		-0.06f, 0.45f, 0.0f,		0.5f,0.5f,0.5f,	// 9
-		0.0f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 10
+		0.0f, 0.0f, 0.0f,		0.0f,0.6f,0.3f,	// 10
 		0.025f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 11
 		-0.025f, 0.0f, 0.0f,		0.0f,0.5f,0.0f,	// 12
-		0.0f, -0.15f, 0.0f,		0.0f,0.5f,0.0f,	// 13
+		0.0f, -0.15f, 0.0f,		0.0f,0.6f,0.3f,	// 13
 		0.07f, -0.15f, 0.0f,	1.0f,1.0f,1.0f,	// 14
 		-0.07f, -0.15f, 0.0f,	1.0f,1.0f,1.0f,	// 15
-		0.0f, -0.45f, 0.0f,		0.0f,0.5f,0.0f,	// 16
+		0.0f, -0.45f, 0.0f,		0.0f,0.6f,0.3f,	// 16
 		0.1f, -0.34f, 0.0f,		0.0f,1.0f,1.0f,	// 17
 		-0.1f, -0.34f, 0.0f,	0.0f,1.0f,1.0f,	// 18
 
@@ -142,7 +142,7 @@ int main() {
 		1,6,
 		21,31,
 
-
+		// vértices para relleno de color
 		1,6,30,
 		4,31,6,
 		1,2,6,
@@ -162,6 +162,7 @@ int main() {
 		21,23,28,
 		23,27,28,
 
+		//relleno parte inferior
 		6,11,30,
 		11,14,30,
 		14,17,30,
@@ -171,6 +172,7 @@ int main() {
 		13,16,31,
 		16,29,31,
 
+		// relleno del cuerpo
 		13,15,16,
 		12,13,15,
 		14,15,17,
@@ -298,6 +300,7 @@ int main() {
 
         
 		// Para dibujar triángulos
+		// DIBUJO DE LOS TRIÁNGULOS DE RELLENO EN BLANCO Y NARANJA
         glDrawArrays(GL_TRIANGLES,0,3); // a partir de qué elemento del arreglo va a dibujar
 										  // cuántos vértices contiguos se van a usar para dibujar el triángulo
 		glDrawArrays(GL_TRIANGLES, 3, 3);
@@ -307,6 +310,7 @@ int main() {
 
 		// Dibuja por elementos, no por arreglos
 		// Para dibujar elementos sin que sean contiguos
+		// DIBUJO DEL CONTORNO DE LA FIGURA (primeros 70 elementos del arreglo de índices)
         glDrawElements(GL_LINES,70,GL_UNSIGNED_INT,0); // figura por dibujar
 														  // tamaño de la figura
 														  // elementos no signados de tipo entero
