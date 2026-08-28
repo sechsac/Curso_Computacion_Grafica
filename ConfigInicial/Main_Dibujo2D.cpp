@@ -65,12 +65,12 @@ int main() {
 	// Componente de profundidad es 0 porque es 2D
 	// Formato de color en RGB [0-1]
 	float vertices[] = {
-		-0.8f,  0.85f, 0.0f,    0.0f,1.0f,0.0f,  // 1
-		-0.7f, 0.9f, 0.0f,    0.5f,1.0f,0.0f,  // 2
-		-0.67f, 0.75f, 0.0f,   1.0f, 0.0f, 0.0f,  // 3
-		0.8f,  0.85f, 0.0f,   0.0f,0.0f,1.0f, // 4 
-		0.7f,  0.9f, 0.0f,   0.0f,0.0f,1.0f,	// 5
-		0.67f,  0.75f, 0.0f,   0.0f,0.0f,1.0f,	// 6
+		-0.8f,  0.85f, 0.0f,    1.0f,1.0f,1.0f,  // 1
+		-0.7f, 0.9f, 0.0f,    1.0f,1.0f,1.0f,  // 2
+		-0.67f, 0.75f, 0.0f,   1.0f, 1.0f, 1.0f,  // 3
+		0.8f,  0.85f, 0.0f,   1.0f,1.0f,1.0f, // 4 
+		0.7f,  0.9f, 0.0f,   1.0f,1.0f,1.0f,	// 5
+		0.67f,  0.75f, 0.0f,   1.0f,1.0f,1.0f,	// 6
 
 		0.0f, 0.2f, 0.0f,		0.0f,0.5f,0.0f,	// 7
 		0.06f, 0.45f, 0.0f,		0.5f,0.5f,0.5f,	// 8
@@ -92,12 +92,12 @@ int main() {
 		0.55f, -0.10f, 0.0f,    0.5f,1.0f,0.0f,	// 22
 		-0.62f, -0.25f, 0.0f,    0.5f,1.0f,0.0f,	// 23
 		0.62f, -0.25f, 0.0f,    0.5f,1.0f,0.0f,	// 24
-		-0.3f, -0.95f, 0.0f,		0.5f,1.0f,0.0f,	// 25
-		-0.27f, -0.75f, 0.0f,	0.5f,1.0f,0.0f,	// 26
-		-0.2f, -0.85f, 0.0f,	0.5f,1.0f,0.0f,	// 27
-		0.3f, -0.95f, 0.0f,		0.5f,1.0f,0.0f,	// 28
-		0.27f, -0.75f, 0.0f,	0.5f,1.0f,0.0f,	// 29
-		0.2f, -0.85f, 0.0f,	0.5f,1.0f,0.0f,	// 30
+		-0.3f, -0.95f, 0.0f,		1.0f,1.0f,1.0f,	// 25
+		-0.27f, -0.75f, 0.0f,	1.0f,1.0f,1.0f,	// 26
+		-0.2f, -0.85f, 0.0f,	1.0f,1.0f,1.0f,	// 27
+		0.3f, -0.95f, 0.0f,		1.0f,1.0f,1.0f,	// 28
+		0.27f, -0.75f, 0.0f,	1.0f,1.0f,1.0f,	// 29
+		0.2f, -0.85f, 0.0f,	1.0f,1.0f,1.0f,	// 30
 
 		-0.45f, -0.07f, 0.0f, 	0.5f,1.0f,0.0f,	// 31
 		0.45f, -0.07f, 0.0f, 	0.5f,1.0f,0.0f,	// 32
@@ -108,6 +108,8 @@ int main() {
 	unsigned int indices[] = {  // note that we start from 0!
 		0,18,
 		0,2,
+		2,30,
+		30,20,
 		2,25,
 		18,20,
 		20,22,
@@ -138,8 +140,21 @@ int main() {
 		15,17,
 		4,6,
 		1,6,
-		30,20,
-		21,31
+		21,31,
+
+
+		1,6,30,
+		4,31,6,
+		1,2,6,
+		2,30,6,
+		4,5,6,
+		5,6,31,
+		0,18,2,
+		2,18,20,
+		2,20,30,
+		3,5,31,
+		3,31,21,
+		3,19,21
 	};
 
 
@@ -194,11 +209,11 @@ int main() {
         glBindVertexArray(VAO);
 
 
-        glPointSize(10); // Para definir el tamaño del vértice
-        glDrawArrays(GL_POINTS,0,1); // a partir de qué elemento del arreglo va a dibujar
+        //glPointSize(10); // Para definir el tamaño del vértice
+        //glDrawArrays(GL_POINTS,0,1); // a partir de qué elemento del arreglo va a dibujar
 									   // cuántos elementos contiguos se van a ocupar para comenzar a dibujar
         
-		glDrawArrays(GL_POINTS, 1, 1);
+		/*glDrawArrays(GL_POINTS, 1, 1);
 		glDrawArrays(GL_POINTS, 2, 1);
 		glDrawArrays(GL_POINTS, 3, 1);
 		glDrawArrays(GL_POINTS, 4, 1);
@@ -228,7 +243,7 @@ int main() {
 		glDrawArrays(GL_POINTS, 28, 1);
 		glDrawArrays(GL_POINTS, 29, 1);
 		glDrawArrays(GL_POINTS, 30, 1);
-		glDrawArrays(GL_POINTS, 31, 1);
+		glDrawArrays(GL_POINTS, 31, 1);*/
 
 
 		// Para dibujar una linea (sólo toma en cuenta la unión de dos vértices)
@@ -253,21 +268,27 @@ int main() {
 		glDrawArrays(GL_LINES, 10, 3);
 		glDrawArrays(GL_LINES, 6, 2);
 
-		//glDrawArrays(GL_TRIANGLES, 3, 3);
+		
 
         
 		// Para dibujar triángulos
-        //glDrawArrays(GL_TRIANGLES,0,3); // a partir de qué elemento del arreglo va a dibujar
+        glDrawArrays(GL_TRIANGLES,0,3); // a partir de qué elemento del arreglo va a dibujar
 										  // cuántos vértices contiguos se van a usar para dibujar el triángulo
-		
+		glDrawArrays(GL_TRIANGLES, 3, 3);
+		glDrawArrays(GL_TRIANGLES, 24, 3);
+		glDrawArrays(GL_TRIANGLES, 27, 3);
+
+
 		// Dibuja por elementos, no por arreglos
 		// Para dibujar elementos sin que sean contiguos
-        glDrawElements(GL_LINES,68,GL_UNSIGNED_INT,0); // figura por dibujar
+        glDrawElements(GL_LINES,70,GL_UNSIGNED_INT,0); // figura por dibujar
 														  // tamaño de la figura
 														  // elementos no signados de tipo entero
 														  // desde dónde se leen los índices
 
-		//glDrawElements(GL_LINES,2,GL_UNSIGNED_INT,1);
+		
+		// Para dibujar los triángulos de relleno de la figura, saltándose los primeros 70 elementos del arreglo de índices
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)(70 * sizeof(unsigned int)));
         
         
         glBindVertexArray(0);
