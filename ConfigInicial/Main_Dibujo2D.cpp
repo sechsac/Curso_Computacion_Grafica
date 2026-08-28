@@ -149,12 +149,38 @@ int main() {
 		2,30,6,
 		4,5,6,
 		5,6,31,
-		0,18,2,
-		2,18,20,
-		2,20,30,
-		3,5,31,
+		0,18,20,
+		//2,20,30,//
+		//3,5,31,
+		0,30,20,
 		3,31,21,
-		3,19,21
+		3,19,21,
+		20,30,25,
+		20,22,25,
+		22,24,25,
+		21,31,28,
+		21,23,28,
+		23,27,28,
+
+		6,11,30,
+		11,14,30,
+		14,17,30,
+		17,26,30,
+		6,10,31,
+		10,13,31,
+		13,16,31,
+		16,29,31,
+
+		13,15,16,
+		12,13,15,
+		14,15,17,
+		12,14,15,
+		10,12,13,
+		9,10,12,
+		11,12,14,
+		9,11,12,
+		6,9,10,
+		6,9,11
 	};
 
 
@@ -288,7 +314,7 @@ int main() {
 
 		
 		// Para dibujar los triángulos de relleno de la figura, saltándose los primeros 70 elementos del arreglo de índices
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)(70 * sizeof(unsigned int)));
+		glDrawElements(GL_TRIANGLES, 108, GL_UNSIGNED_INT, (void*)(70 * sizeof(unsigned int)));
         
         
         glBindVertexArray(0);
