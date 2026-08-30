@@ -230,13 +230,15 @@ int main() {
 		glm::mat4 model = glm::mat4(1);
 		glm::mat4 view = glm::mat4(1);
 
-		//  view = glm::translate(view, glm::vec3(5.0f,5.0f,0.0f));
-		   //model = glm::rotate( model, 0.5f, glm::vec3( 1.0f, 0.0f, 0.0f ) ); // use to compare orthographic and perspective projection
-		   //model = glm::scale(model, glm::vec3(500.0f, 500.0f, 500.0f));
+		  view = glm::translate(view, glm::vec3(0.0f,0.0f,-12.0f));	// para proyección en perspectiva
+
+		   model = glm::rotate( model, 0.5f, glm::vec3(0.0f, 1.0f, 0.0f ) ); // use to compare orthographic and perspective projection
+		   model = glm::scale(model, glm::vec3(2.0f, 3.0f, 1.0f));
+		   
 		//  view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 5,-800.0f ) ); // use with orthographic projection
 																				  // se modifica la vista del cubo (se traslada hacia abajo)
 
-		// COMUNICACION DE LA NUEVA INFORMACION DE LAS PROYECCIONES AL SHADER (mediante uniforms)
+		// COMUNICACION DE LA NUEVA INFORMACION DE LAS PROYECCIONES AL SHADER -> CPU (mediante uniforms)
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
 		GLint projecLoc = glGetUniformLocation(ourShader.Program, "projection");
@@ -248,6 +250,16 @@ int main() {
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		
+
+		// PARA AGREGAR NUEVOS ELEMENTOS
+		model = glm::mat4(1);
+		model = glm::translate(model,glm::vec3(5.0f, 0.0f, 0.0f));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 		glBindVertexArray(0);
 
 
