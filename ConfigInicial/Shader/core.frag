@@ -5,5 +5,5 @@ out vec4 color;
 
 void main()
 {
-	color = vec4(ourColor, 1.0f); // la parte del 1 se ocupa para transparencia
+	color = vec4(ourColor, 1.0f);
 }

@@ -27,8 +27,8 @@ public:
 		try
 		{
 			// Open files
-			vShaderFile.open(vertexPath); // Shader que se carga desde el archivo de vérices
-			fShaderFile.open(fragmentPath); // Shader que se carga desde el archivo de fragmentos
+			vShaderFile.open(vertexPath);
+			fShaderFile.open(fragmentPath);
 			std::stringstream vShaderStream, fShaderStream;
 			// Read file's buffer contents into streams
 			vShaderStream << vShaderFile.rdbuf();
