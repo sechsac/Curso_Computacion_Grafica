@@ -81,7 +81,7 @@ int main() {
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	// use with Orthographic Projection
 
-	GLfloat vertices[] = {
+	/*GLfloat vertices[] = {
        -0.5f*500, -0.5f, 0.5f, 1.0f, 0.0f,0.0f,//Front
 		0.5f * 500, -0.5f * 500, 0.5f * 500,  1.0f, 0.0f,0.0f,
 		0.5f * 500,  0.5f * 500, 0.5f * 500,  1.0f, 0.0f,0.0f,
@@ -123,53 +123,53 @@ int main() {
 		0.5f * 500,  0.5f * 500,  0.5f * 500,  1.0f, 0.2f,0.5f,
 		-0.5f * 500,  0.5f * 500,  0.5f * 500, 1.0f, 0.2f,0.5f,
 		-0.5f * 500,  0.5f * 500, -0.5f * 500, 1.0f, 0.2f,0.5f,
-	};
+	};*/
 	
 
 	// use with Perspective Projection
-	//float vertices[] = {
-	//	-0.5f, -0.5f, 0.5f, 1.0f, 0.0f,0.0f,//Front
-	//	0.5f, -0.5f, 0.5f,  1.0f, 0.0f,0.0f,
-	//	0.5f,  0.5f, 0.5f,  1.0f, 0.0f,0.0f,
-	//	0.5f,  0.5f, 0.5f,  1.0f, 0.0f,0.0f,
-	//	-0.5f,  0.5f, 0.5f, 1.0f, 0.0f,0.0f,
-	//	-0.5f, -0.5f, 0.5f, 1.0f, 0.0f,0.0f,
-	//	
-	//    -0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,//Back
-	//	 0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,
-	//	 0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
-	//	 0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
-	//    -0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
-	//    -0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,
-	//	
-	//	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,1.0f,
-	//	 0.5f, -0.5f, -0.5f,  0.0f, 0.0f,1.0f,
-	//	 0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f,
-	//	 0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f,
-	//	 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
-	//	 0.5f,  -0.5f, 0.5f, 0.0f, 0.0f,1.0f,
- //     
-	//	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,0.0f,
-	//	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,0.0f,
-	//	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f,0.0f,
-	//	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f,0.0f,
-	//	-0.5f, -0.5f,  0.5f,  1.0f, 1.0f,0.0f,
-	//	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,0.0f,
-	//	
-	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,1.0f,
-	//	0.5f, -0.5f, -0.5f,  0.0f, 1.0f,1.0f,
-	//	0.5f, -0.5f,  0.5f,  0.0f, 1.0f,1.0f,
-	//	0.5f, -0.5f,  0.5f,  0.0f, 1.0f,1.0f,
-	//	-0.5f, -0.5f,  0.5f, 0.0f, 1.0f,1.0f,
-	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,1.0f,
-	//	
-	//	-0.5f,  0.5f, -0.5f, 1.0f, 0.2f,0.5f,
-	//	0.5f,  0.5f, -0.5f,  1.0f, 0.2f,0.5f,
-	//	0.5f,  0.5f,  0.5f,  1.0f, 0.2f,0.5f,
-	//	0.5f,  0.5f,  0.5f,  1.0f, 0.2f,0.5f,
-	//	-0.5f,  0.5f,  0.5f, 1.0f, 0.2f,0.5f,
-	//	-0.5f,  0.5f, -0.5f, 1.0f, 0.2f,0.5f,
-	//};
+	float vertices[] = {
+		-0.5f, -0.5f, 0.5f, 1.0f, 0.0f,0.0f,//Front
+		0.5f, -0.5f, 0.5f,  1.0f, 0.0f,0.0f,
+		0.5f,  0.5f, 0.5f,  1.0f, 0.0f,0.0f,
+		0.5f,  0.5f, 0.5f,  1.0f, 0.0f,0.0f,
+		-0.5f,  0.5f, 0.5f, 1.0f, 0.0f,0.0f,
+		-0.5f, -0.5f, 0.5f, 1.0f, 0.0f,0.0f,
+		
+	    -0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,//Back
+		 0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,
+		 0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
+		 0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
+	    -0.5f,  0.5f,-0.5f, 0.0f, 1.0f,0.0f,
+	    -0.5f, -0.5f,-0.5f, 0.0f, 1.0f,0.0f,
+		
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+		 0.5f,  -0.5f, 0.5f, 0.0f, 0.0f,1.0f,
+      
+		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,0.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f,0.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f,0.0f,
+		-0.5f, -0.5f,  0.5f,  1.0f, 1.0f,0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,0.0f,
+		
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 1.0f,1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 1.0f,1.0f,
+		-0.5f, -0.5f,  0.5f, 0.0f, 1.0f,1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,1.0f,
+		
+		-0.5f,  0.5f, -0.5f, 1.0f, 0.2f,0.5f,
+		0.5f,  0.5f, -0.5f,  1.0f, 0.2f,0.5f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.2f,0.5f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.2f,0.5f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 0.2f,0.5f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 0.2f,0.5f,
+	};
 
 
 
@@ -208,11 +208,12 @@ int main() {
 	// GENERACION DE LA MATRIZ DE PROYECCION
 	glm::mat4 projection=glm::mat4(1);
 
-	//projection = glm::perspective(45.0f, (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);//FOV, Radio de aspecto,znear,zfar
+	// SE DEFINE LA MATRIZ COMO PROYECCION EN PERSPECTIVA
+	projection = glm::perspective(45.0f, (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);//FOV, Radio de aspecto,znear,zfar
 	
 	// DEFINIMOS LA MATRIZ COMO PROYECCION ORTOGONAL (límites de la matriz como argumentos)
 	// izquierda (donde comienza), derecha (ancho de pantalla), fondo, alto (alto de la pantalla), cercanía, lejanía
-	projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);//Izq,Der,Fondo,Alto,Cercania,Lejania
+	//projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);//Izq,Der,Fondo,Alto,Cercania,Lejania
 	while (!glfwWindowShouldClose(window))
 	{
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
@@ -232,7 +233,8 @@ int main() {
 		//  view = glm::translate(view, glm::vec3(5.0f,5.0f,0.0f));
 		   //model = glm::rotate( model, 0.5f, glm::vec3( 1.0f, 0.0f, 0.0f ) ); // use to compare orthographic and perspective projection
 		   //model = glm::scale(model, glm::vec3(500.0f, 500.0f, 500.0f));
-		   view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 2,-700.0f ) ); // use with orthographic projection
+		//  view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 5,-800.0f ) ); // use with orthographic projection
+																				  // se modifica la vista del cubo (se traslada hacia abajo)
 
 		// COMUNICACION DE LA NUEVA INFORMACION DE LAS PROYECCIONES AL SHADER (mediante uniforms)
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
