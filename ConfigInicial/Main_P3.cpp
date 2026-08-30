@@ -255,10 +255,26 @@ int main() {
 		// PARA AGREGAR NUEVOS ELEMENTOS
 		model = glm::mat4(1);
 		model = glm::translate(model,glm::vec3(5.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // use to compare orthographic and perspective projection
+		model = glm::scale(model, glm::vec3(8.0f, 1.0f, 5.0f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
+		// AÑADIENDO UN CUBO EXTRA (complementario a las actividades del previo)
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-5.0f, 3.0f, 1.0f));
+		model = glm::rotate(model, -60.0f, glm::vec3(0.0f, 3.0f, -1.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 3.0f, 1.0f));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
 
 		glBindVertexArray(0);
 
