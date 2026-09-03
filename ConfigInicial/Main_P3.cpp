@@ -1,6 +1,6 @@
-// Previo 3. Proyecciones, transformaciones y Shaders
+// Práctica 3. Proyecciones, transformaciones y Shaders
 // Hernández Castro Laura Isabel
-// Fecha: 30/08/2026
+// Fecha: 03/09/2026
 // No. de cuenta: 320293634
 
 
@@ -36,7 +36,7 @@ int main() {
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Proyecciones y transformaciones basicas", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Práctica 3. Proyecciones y transformaciones basicas", nullptr, nullptr);
 
 	int screenWidth, screenHeight;
 
@@ -230,10 +230,10 @@ int main() {
 		glm::mat4 model = glm::mat4(1);
 		glm::mat4 view = glm::mat4(1);
 
-		  view = glm::translate(view, glm::vec3(0.0f,0.0f,-12.0f));	// para proyección en perspectiva
+		  view = glm::translate(view, glm::vec3(-3.0f, -3.0f, -10.0f));	// para proyección en perspectiva
 
-		   model = glm::rotate( model, 0.5f, glm::vec3(0.0f, 1.0f, 0.0f ) ); // use to compare orthographic and perspective projection
-		   model = glm::scale(model, glm::vec3(2.0f, 3.0f, 1.0f));
+		   model = glm::rotate( model, 0.0f, glm::vec3(0.0f, 3.0f, 0.0f ) ); // use to compare orthographic and perspective projection
+		   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		   
 		//  view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 5,-800.0f ) ); // use with orthographic projection
 																				  // se modifica la vista del cubo (se traslada hacia abajo)
@@ -249,21 +249,26 @@ int main() {
 		
 
 		glBindVertexArray(VAO);
+		
+		
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
-
+		
 		// PARA AGREGAR NUEVOS ELEMENTOS
 		model = glm::mat4(1);
-		model = glm::translate(model,glm::vec3(5.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // use to compare orthographic and perspective projection
-		model = glm::scale(model, glm::vec3(8.0f, 1.0f, 5.0f));
+		model = glm::translate(model,glm::vec3(-0.3f, 1.45f, -0.5f)); //-1.0f, 1.3f, -2.5f
+		model = glm::rotate(model, glm::radians(165.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // use to compare orthographic and perspective projection
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		
 
 
 
+
+		/*
 		// AÑADIENDO UN CUBO EXTRA (complementario a las actividades del previo)
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(-5.0f, 3.0f, 1.0f));
@@ -273,7 +278,7 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
+		*/
 
 
 		glBindVertexArray(0);
