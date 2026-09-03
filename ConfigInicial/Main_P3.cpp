@@ -230,9 +230,9 @@ int main() {
 		glm::mat4 model = glm::mat4(1);
 		glm::mat4 view = glm::mat4(1);
 
-		  view = glm::translate(view, glm::vec3(-3.0f, -3.0f, -10.0f));	// para proyección en perspectiva
+		  view = glm::translate(view, glm::vec3(-3.0f, -5.0f, -10.0f));	// para proyección en perspectiva
 
-		   model = glm::rotate( model, 0.0f, glm::vec3(0.0f, 3.0f, 0.0f ) ); // use to compare orthographic and perspective projection
+		   model = glm::rotate( model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f ) ); // use to compare orthographic and perspective projection
 		   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		   
 		//  view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 5,-800.0f ) ); // use with orthographic projection
@@ -279,6 +279,17 @@ int main() {
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
+
+		// FORMACIÓN DEL CUARTO CUBO
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 6.3f, -1.0f));
+		model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.5f, 2.5f, 2.5f));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 
 		glBindVertexArray(0);
