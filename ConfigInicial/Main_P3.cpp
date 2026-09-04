@@ -230,10 +230,10 @@ int main() {
 		glm::mat4 model = glm::mat4(1);
 		glm::mat4 view = glm::mat4(1);
 
-		  view = glm::translate(view, glm::vec3(-3.0f, -5.0f, -10.0f));	// para proyección en perspectiva
+		  view = glm::translate(view, glm::vec3(-3.0f, -5.0f, -12.0f));	// para proyección en perspectiva
 
 		   model = glm::rotate( model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f ) ); // use to compare orthographic and perspective projection
-		   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		   model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
 		   
 		//  view = glm::translate( view, glm::vec3( screenWidth / 2, screenHeight / 5,-800.0f ) ); // use with orthographic projection
 																				  // se modifica la vista del cubo (se traslada hacia abajo)
@@ -256,9 +256,9 @@ int main() {
 		
 		// PARA AGREGAR NUEVOS ELEMENTOS
 		model = glm::mat4(1);
-		model = glm::translate(model,glm::vec3(-0.3f, 1.43f, -0.5f)); //-1.0f, 1.3f, -2.5f
+		model = glm::translate(model,glm::vec3(-0.3f, 1.43f, 0.0f)); //-1.0f, 1.3f, -2.5f
 		model = glm::rotate(model, glm::radians(165.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // use to compare orthographic and perspective projection
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::scale(model, glm::vec3(1.3f, 1.3f, 1.3f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -271,19 +271,30 @@ int main() {
 		
 		// AÑADIENDO UN CUBO EXTRA (complementario a las actividades del previo)
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-1.0f, 3.76f, -1.0f));
+		model = glm::translate(model, glm::vec3(-1.0f, 3.38f, -1.0f));
 		model = glm::rotate(model, glm::radians(140.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::scale(model, glm::vec3(1.8f, 1.8f, 1.8f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
-
+		
 		// FORMACIÓN DEL CUARTO CUBO
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-1.0f, 6.3f, -1.0f));
+		model = glm::translate(model, glm::vec3(-1.0f, 5.83f, -1.0f));
 		model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.3f, 2.3f, 2.3f));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		// FORMACIÓN DEL QUINTO CUBO
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 8.67f, -1.0f)); 
+		model = glm::rotate(model, glm::radians(212.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
 		model = glm::scale(model, glm::vec3(2.5f, 2.5f, 2.5f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
