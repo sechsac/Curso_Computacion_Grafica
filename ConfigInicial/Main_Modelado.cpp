@@ -207,16 +207,16 @@ int main() {
 		
 		
 		// CREACIÓN DE UNA MESA
-	    model = glm::mat4(1.0f);
+	    /*model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(1.0f, 0.1f, 1.0f)); // Ancho, grosor, profundidad
 		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 		
 		
 		// CREACIÓN DE LA PATA
 		// Pata 1
-		model = glm::mat4(1.0f);
+		/*model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(2.9f, -0.6f, 1.9f)); // Posición de la pata
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -241,13 +241,13 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); // Posición de la pata
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 		
 		// MANIPULACIÓN DEL CÓDIGO - ACTIVIDAD EXTRA
 		// CREACIÓN DE LOS PALITOS DE ARRIBA
 		// Palito 1
-		model = glm::mat4(1.0f);
+		/*model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(2.9f, 0.8f, -1.9f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -265,7 +265,91 @@ int main() {
 		model = glm::scale(model, glm::vec3(1.0f, 0.6f, 0.1f)); // Ancho, grosor, profundidad
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
+
+
+		// UNICORNIO
+		// Cabeza
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(1.0f, 0.85f, 1.3f)); // Ancho, grosor, profundidad
+		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Cuello
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(1.0f, 0.2f, 0.65f)); // Ancho, grosor, profundidad
+		model = glm::translate(model, glm::vec3(0.0f, 0.12f, -0.5f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Cuerpo
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(1.0f, 0.75f, 1.7f)); // Ancho, grosor, profundidad
+		model = glm::translate(model, glm::vec3(0.0f, -0.6f, -0.5f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Patas
+		// Izquierda delantera
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(0.95f, -2.5f, -0.5f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Pezuña
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(0.95f, -12.5f, -0.5f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		// Derecha delantera
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(-0.95f, -2.5f, -0.5f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Pezuña
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(-0.95f, -12.5f, -0.5f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		// Izquierda trasera
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(0.95f, -2.5f, -4.4f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Pezuña
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(0.95f, -12.5f, -4.4f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		// Derecha trasera
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(-0.95f, -2.5f, -4.4f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Pezuña
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
+		model = glm::translate(model, glm::vec3(-0.95f, -12.5f, -4.4f)); // Posición de la pata
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 
 
