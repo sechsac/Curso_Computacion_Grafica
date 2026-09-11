@@ -173,7 +173,7 @@ int main() {
 	//projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);//Izq,Der,Fondo,Alto,Cercania,Lejania
 	while (!glfwWindowShouldClose(window))
 	{
-		
+
 		Inputs(window);
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -181,16 +181,16 @@ int main() {
 		// Render
 		// Clear the colorbuffer
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 		// Draw our first triangle
 		ourShader.Use();
-		glm::mat4 model=glm::mat4(1);
-		glm::mat4 view=glm::mat4(1);
-	
+		glm::mat4 model = glm::mat4(1);
+		glm::mat4 view = glm::mat4(1);
 
-		view = glm::translate(view, glm::vec3(movX,movY, movZ)); // Se le manda el valor de la variable, ya no el específico
+
+		view = glm::translate(view, glm::vec3(movX, movY, movZ)); // Se le manda el valor de la variable, ya no el específico
 		view = glm::rotate(view, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -201,71 +201,9 @@ int main() {
 		glUniformMatrix4fv(projecLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	
+
 
 		glBindVertexArray(VAO);
-		
-		
-		// CREACIÓN DE UNA MESA
-	    /*model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.0f, 0.1f, 1.0f)); // Ancho, grosor, profundidad
-		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
-		
-		
-		// CREACIÓN DE LA PATA
-		// Pata 1
-		/*model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
-		model = glm::translate(model, glm::vec3(2.9f, -0.6f, 1.9f)); // Posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		
-		// Pata 2
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
-		model = glm::translate(model, glm::vec3(-2.9f, -0.6f, 1.9f)); // Posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// Pata 3
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
-		model = glm::translate(model, glm::vec3(-2.9f, -0.6f, -1.9f)); // Posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// Pata 4
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño de la pata
-		model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); // Posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
-
-		
-		// MANIPULACIÓN DEL CÓDIGO - ACTIVIDAD EXTRA
-		// CREACIÓN DE LOS PALITOS DE ARRIBA
-		// Palito 1
-		/*model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño del palito
-		model = glm::translate(model, glm::vec3(2.9f, 0.8f, -1.9f)); // Posición del palito
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// Palito 2
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); // Tamaño del palito
-		model = glm::translate(model, glm::vec3(-2.9f, 0.8f, -1.9f)); // Posición del palito
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// CREACIÓN DE LA TABLA DEL RESPALDO
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.0f, 0.6f, 0.1f)); // Ancho, grosor, profundidad
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 
 		// UNICORNIO
@@ -365,6 +303,72 @@ int main() {
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.48f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 0.35f, -7.5f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Ojos
+		// Izquierdo
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(3.6f, 3.6f, -0.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(3.6f, 2.6f, -0.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f); // blanco
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(3.6f, 3.6f, -1.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(3.6f, 2.6f, -1.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Derecho
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-3.6f, 3.6f, -0.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-3.6f, 2.6f, -0.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f); // blanco
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-3.6f, 3.6f, -1.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-3.6f, 2.6f, -1.4f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Nariz
+		// Izquierda
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.4f, 0.08f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(1.2f, 1.3f, 8.15f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Derecha
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.4f, 0.08f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-1.2f, 1.3f, 8.15f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -480,6 +484,85 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
+		// Rayito
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.08f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(6.0f, -2.25f, -8.1f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.08f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(6.0f, -3.25f, -9.1f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		// Alas
+		// Izquierda
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.65f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(2.6f, 2.6f, -2.0f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(2.6f, 0.25f, -5.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(2.6f, 0.1f, -6.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.3f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(2.6f, 0.67f, -7.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(2.6f, 1.67f, -8.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Derecha
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.65f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-2.6f, 2.6f, -2.0f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-2.6f, 0.25f, -5.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-2.6f, 0.1f, -6.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.3f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-2.6f, 0.67f, -7.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
+		model = glm::translate(model, glm::vec3(-2.6f, 1.67f, -8.6f)); // Posición del palito
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
 
 		glBindVertexArray(0);	
 
@@ -531,5 +614,4 @@ int main() {
 	 if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		 rot -= 0.04f;
  }
-
 
