@@ -316,7 +316,6 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		// Cuerno
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.3f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 8.4f, -0.8f)); // Posición del palito
