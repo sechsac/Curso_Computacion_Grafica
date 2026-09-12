@@ -1,7 +1,7 @@
 /*
 Práctica 4. Modelado Geométrico
 Hernández Castro Laura Isabel
-Fecha: 05/09/2026
+Fecha: 11/09/2026
 No. de cuenta: 320293634
 */
 
@@ -171,6 +171,21 @@ int main() {
 
 	projection = glm::perspective(glm::radians(45.0f), (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);//FOV, Radio de aspecto,znear,zfar
 	//projection = glm::ortho(0.0f, (GLfloat)screenWidth, 0.0f, (GLfloat)screenHeight, 0.1f, 1000.0f);//Izq,Der,Fondo,Alto,Cercania,Lejania
+
+
+	// Paleta de colores basada en la imagen
+	glm::vec3 colorBlanco = glm::vec3(0.95f, 0.95f, 0.98f);
+	glm::vec3 colorBlancoP = glm::vec3(0.95f, 0.93f, 0.91f);
+	glm::vec3 colorRosaCuerpo = glm::vec3(0.95f, 0.45f, 0.55f);
+	glm::vec3 colorAzulCuerpo = glm::vec3(0.40f, 0.85f, 0.95f);
+	glm::vec3 colorRosaPastel = glm::vec3(0.98f, 0.70f, 0.85f);
+	glm::vec3 colorMorado = glm::vec3(0.60f, 0.20f, 0.80f);
+	glm::vec3 colorAzulOjo = glm::vec3(0.10f, 0.30f, 0.85f);
+	glm::vec3 colorRojoNostril = glm::vec3(0.90f, 0.15f, 0.20f);
+	glm::vec3 colorPurpuraRay = glm::vec3(0.75f, 0.45f, 0.90f);
+
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 
@@ -180,7 +195,7 @@ int main() {
 
 		// Render
 		// Clear the colorbuffer
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(0.2f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -196,6 +211,8 @@ int main() {
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
 		GLint projecLoc = glGetUniformLocation(ourShader.Program, "projection");
+		// Para añadir los colores de la figura
+		GLint colorLoc = glGetUniformLocation(ourShader.Program, "objectColor");
 
 
 		glUniformMatrix4fv(projecLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -208,13 +225,15 @@ int main() {
 
 		// UNICORNIO
 		// Cabeza
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(1.0f, 0.85f, 1.3f)); // Ancho, grosor, profundidad
 		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
+	
 		// Orejas
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		// Izquierda
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.45f, 0.16f)); // Tamaño del palito
@@ -242,12 +261,14 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Tupé
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorMorado));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.95f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 6.4f, -0.2f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorPurpuraRay));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.64f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 7.4f, -0.3f)); // Posición del palito
@@ -255,6 +276,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Cuerno
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlanco));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.3f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 8.4f, -0.8f)); // Posición del palito
@@ -275,6 +297,7 @@ int main() {
 
 
 		// Cuello
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(1.0f, 0.2f, 0.65f)); // Ancho, grosor, profundidad
 		model = glm::translate(model, glm::vec3(0.0f, 0.12f, -0.5f));
@@ -282,6 +305,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pelo del cuello
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorMorado));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 1.05f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 0.4f, -4.55f)); // Posición del palito
@@ -308,6 +332,7 @@ int main() {
 
 		// Ojos
 		// Izquierdo
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorAzulOjo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(3.6f, 3.6f, -0.4f)); // Posición del palito
@@ -320,12 +345,14 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlanco));
 		model = glm::mat4(1.0f); // blanco
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(3.6f, 3.6f, -1.4f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorAzulOjo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(3.6f, 2.6f, -1.4f)); // Posición del palito
@@ -345,12 +372,14 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlanco));
 		model = glm::mat4(1.0f); // blanco
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(-3.6f, 3.6f, -1.4f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorAzulOjo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(-3.6f, 2.6f, -1.4f)); // Posición del palito
@@ -358,6 +387,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Nariz
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRojoNostril));
 		// Izquierda
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.4f, 0.08f)); // Tamaño del palito
@@ -374,6 +404,7 @@ int main() {
 
 
 		// Cuerpo
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(1.0f, 0.75f, 1.7f)); // Ancho, grosor, profundidad
 		model = glm::translate(model, glm::vec3(0.0f, -0.6f, -0.5f));
@@ -381,6 +412,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Patas
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		// Izquierda delantera
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
@@ -389,6 +421,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pezuña
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRosaCuerpo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(0.95f, -12.5f, -0.5f)); // Posición de la pata
@@ -397,6 +430,7 @@ int main() {
 
 
 		// Derecha delantera
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(-0.95f, -2.5f, -0.5f)); // Posición de la pata
@@ -404,6 +438,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pezuña
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRosaCuerpo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(-0.95f, -12.5f, -0.5f)); // Posición de la pata
@@ -412,6 +447,7 @@ int main() {
 
 
 		// Izquierda trasera
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(0.95f, -2.5f, -4.4f)); // Posición de la pata
@@ -419,6 +455,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pezuña
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRosaCuerpo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(0.95f, -12.5f, -4.4f)); // Posición de la pata
@@ -427,6 +464,7 @@ int main() {
 
 
 		// Derecha trasera
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlancoP));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.4f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(-0.95f, -2.5f, -4.4f)); // Posición de la pata
@@ -434,6 +472,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pezuña
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRosaCuerpo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.35f, 0.1f, 0.35f)); // Tamaño de la pata
 		model = glm::translate(model, glm::vec3(-0.95f, -12.5f, -4.4f)); // Posición de la pata
@@ -441,42 +480,49 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Pelo de la cola
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorMorado));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.48f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.1f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorPurpuraRay));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.48f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -3.1f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorPurpuraRay));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.48f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -3.66f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorMorado));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.9f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, -0.41f, -11.0f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorPurpuraRay));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.9f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, -0.41f, -12.0f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorMorado));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.45f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, -4.6f, -4.7f)); // Posición del palito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorPurpuraRay));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.45f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(0.0f, -3.6f, -4.7f)); // Posición del palito
@@ -485,6 +531,7 @@ int main() {
 
 
 		// Rayito
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorRosaPastel));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.08f, 0.16f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(6.0f, -2.25f, -8.1f)); // Posición del palito
@@ -499,6 +546,7 @@ int main() {
 
 
 		// Alas
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorAzulCuerpo));
 		// Izquierda
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.65f)); // Tamaño del palito
@@ -512,6 +560,7 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlanco));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(2.6f, 0.1f, -6.6f)); // Posición del palito
@@ -531,6 +580,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Derecha
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorAzulCuerpo));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.65f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(-2.6f, 2.6f, -2.0f)); // Posición del palito
@@ -543,6 +593,7 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		glUniform3fv(colorLoc, 1, glm::value_ptr(colorBlanco));
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.16f, 0.65f, 0.16f)); // Tamaño del palito
 		model = glm::translate(model, glm::vec3(-2.6f, 0.1f, -6.6f)); // Posición del palito
