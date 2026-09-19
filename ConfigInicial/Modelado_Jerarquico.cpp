@@ -1,6 +1,6 @@
 // Práctica 5. Modelado jerárquico
 // Hernández Castro Laura Isabel
-// Fecha: 14/09/2026
+// Fecha: 18/09/2026
 // No. de cuenta: 320293634
 
 
@@ -188,7 +188,7 @@ int main() {
 
 		// Guarda información de la posición del modelo (son matrices auxiliares)
 		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
-		glm::mat4 modelTemp2 = glm::mat4(1.0f); //Temp
+		glm::mat4 modelMano = glm::mat4(1.0f); //Temp
 
 
 
@@ -237,12 +237,12 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);//B
 
 
-		// Model : Palma de la mano
+		// Model : Palma de la mano (modelMano)
 		model = glm::translate(modelTemp, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(muneca), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp2 = modelTemp = model = glm::translate(model, glm::vec3(0.25f, 0.0f, 0.0f));
+		modelMano = modelTemp = model = glm::translate(model, glm::vec3(0.25f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 		color = glm::vec3(1.0f, 1.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
@@ -251,40 +251,41 @@ int main() {
 
 
 		// Model : Dedo 1 A
-		model = glm::translate(modelTemp, glm::vec3(0.25f, 0.35f, 0.415f));
+		model = glm::translate(modelMano, glm::vec3(0.25f, 0.35f, 0.415f));
 		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		glm::mat4 falange1A = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//D
 
-
+		
 		// Model : Dedo 2 A
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.27f));
+		model = glm::translate(modelMano, glm::vec3(0.25f, 0.35f, 0.1f));
 		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		glm::mat4 falange2A = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//G
-
+/*
 
 		// Model : Dedo 3 A
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.27f));
+		model = glm::translate(modelMano, glm::vec3(0.25f, 0.35f, -0.1f));
 		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
+		glm::mat4 falange3A = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
+		model = glm::scale(falange3A, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -292,99 +293,96 @@ int main() {
 
 
 		// Model : Dedo 4 A
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.27f));
+		model = glm::translate(modelMano, glm::vec3(0.25f, 0.35f, -0.3f));
 		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
+		glm::mat4 falange4A = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
+		model = glm::scale(falange4A, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//G
+		*/
 
-
-		// Model : Dedo 4 B
-		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
-
+		// Model : Dedo 1 B
+		model = glm::rotate(falange1A, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		glm::mat4 falange1B = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//E
 
-
-		// Model : Dedo 3 B
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, 0.27f));
-		model = glm::rotate(model, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
-		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);//E
-
-
+		
 		// Model : Dedo 2 B
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, 0.27f));
-		model = glm::rotate(model, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
-
+		model = glm::rotate(falange2A, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		glm::mat4 falange2B = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//E
 
 /*
-		// Model : Dedo 1 C
-		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		// Model : Dedo 3 B
+		model = glm::rotate(falange3A, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 
 		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//E
+
+
+		// Model : Dedo 4 B
+		model = glm::rotate(falange4A, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+
+		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//E
+
+
+
+		*/
+
+		// Model : Dedo 1 C
+		model = glm::rotate(falange1B, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
 		color = glm::vec3(1.0f, 0.5f, 0.25f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//F
 
 
-		// Model : Dedo 2 A
-		model = glm::mat4(1);
-		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, -0.27f));
-		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, 0.0f, 1.0f));
+		// Model : Dedo 2 C
+		model = glm::rotate(falange2B, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 
-		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = modelTemp2 = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
-		color = glm::vec3(0.0f, 1.0f, 1.0f); // En RGB
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.2f));
+		color = glm::vec3(1.0f, 0.5f, 0.25f); // En RGB
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);//G
-
-
-		// Model : Dedo 2 B
-		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(dedo2), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		// Pasando el pivote a donde se quiere dibujar la siguiente figura (la muñeca)
-		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
-		color = glm::vec3(1.0f, 0.0f, 1.0f); // En RGB
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);//E
-*/
+		glDrawArrays(GL_TRIANGLES, 0, 36);//F
 
 
 
