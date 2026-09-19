@@ -43,7 +43,7 @@ int main() {
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 5. Modelado jerarquico - Hernandez Castro Laura Isabel", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 5. Modelado jerarquico - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
 	int screenWidth, screenHeight;
 
@@ -305,7 +305,7 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//G
 
-
+		
 		// Model : Dedo 5 A
 		model = glm::translate(modelMano, glm::vec3(0.25f, -0.25f, 0.4f));
 		model = glm::rotate(model, glm::radians(dedo1), glm::vec3(0.0f, -1.0f, 0.0f));
@@ -440,7 +440,7 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);//F
 
 
-
+	
 
 
 		glBindVertexArray(0);
@@ -493,14 +493,22 @@ int main() {
 		 dedo1 += 0.018f;
 	 if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 		 dedo1 -= 0.018f;
+	 // Limita entre 30° y 90°
+	 dedo1 = glm::clamp(dedo1, -90.0f, 30.0f);
+
 	 if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 		 dedo2 += 0.018f;
 	 if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 		 dedo2 -= 0.018f;
+	 // Limita entre 0° y 90°
+	 dedo2 = glm::clamp(dedo2, -90.0f, 0.0f);
+
 	 if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		 dedo3 += 0.018f;
 	 if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 		 dedo3 -= 0.018f;
+	 // Limita entre 0° y 90°
+	 dedo3 = glm::clamp(dedo3, -90.0f, 0.0f);
  }
 
 
