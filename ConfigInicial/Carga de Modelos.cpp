@@ -1,3 +1,11 @@
+// Previo 6. Carga de modelos y cámara sintética
+// Hernández Castro Laura Isabel
+// Fecha: 20/09/2026
+// No. de cuenta: 320293634
+
+
+
+
 // Std. Includes
 #include <string>
 
@@ -54,7 +62,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Carga de modelos y camara sintetica", nullptr, nullptr );
+    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Previo 6.Carga de modelos y camara sintetica - Hernandez Castro Laura Isabel", nullptr, nullptr );
     
     if ( nullptr == window )
     {
@@ -95,7 +103,8 @@ int main( )
     
     // Load models
     // Se carga el modelo 3D
-    Model dog((char*)"Models/RedDog.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
+    // Añadiendo un nuevo modelo
+    Model can((char*)"Models/crushed_can.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
   
@@ -125,13 +134,13 @@ int main( )
         // Draw the loaded model
         glm::mat4 model(1);
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		dog.Draw(shader);
+		can.Draw(shader);
 
         // Aplicando las transformaciones previamente vistas al modelo
         model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        dog.Draw(shader);
+        can.Draw(shader);
 
 
 
