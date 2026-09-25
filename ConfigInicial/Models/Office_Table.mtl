@@ -1,0 +1,14 @@
+# Blender 5.2.0 LTS MTL File: 'Office_Table.blend'
+# www.blender.org
+
+newmtl Office_Table_M
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Office_Tabel_Office_Table_M_BaseColor_sRGB Encoded Rec.709 (sRGB).png
+map_Ns Office_Tabel_Office_Table_M_Roughness_Raw.png
+map_refl Office_Tabel_Office_Table_M_Metallic_Raw.png
+map_Bump -bm 1.000000 Office_Tabel_Office_Table_M_Normal_Raw.png

@@ -1,6 +1,6 @@
-// Previo 6. Carga de modelos y cámara sintética
+// Práctica 6. Carga de modelos y cámara sintética
 // Hernández Castro Laura Isabel
-// Fecha: 20/09/2026
+// Fecha: 21/09/2026
 // No. de cuenta: 320293634
 
 
@@ -62,7 +62,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Previo 6.Carga de modelos y camara sintetica - Hernandez Castro Laura Isabel", nullptr, nullptr );
+    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Practica 6. Carga de modelos y camara sintetica - Hernandez Castro Laura Isabel", nullptr, nullptr );
     
     if ( nullptr == window )
     {
@@ -104,7 +104,11 @@ int main( )
     // Load models
     // Se carga el modelo 3D
     // Añadiendo un nuevo modelo
-    Model can((char*)"Models/crushed_can.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
+    
+    Model perro((char*)"Models/RedDog.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
+    Model pantalla((char*)"Models/SCREEN.obj");
+    
+    Model mesa((char*)"Models/Office_Table.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
   
@@ -132,16 +136,25 @@ int main( )
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // Draw the loaded model
-        glm::mat4 model(1);
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		can.Draw(shader);
-
+        glm::mat4 modelPerro = glm::mat4(1.0f);
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPerro));
+		perro.Draw(shader);
+        
         // Aplicando las transformaciones previamente vistas al modelo
-        model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        can.Draw(shader);
+        glm::mat4 modelMesa = glm::mat4(1.0f);
+		modelMesa = glm::rotate(modelMesa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelMesa = glm::translate(modelMesa, glm::vec3(0.0f, -0.5f, -1.0f));
+		modelMesa = glm::scale(modelMesa, glm::vec3(1.5f, 1.5f, 1.5f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelMesa));
+        mesa.Draw(shader);
 
+        // Dibujando la pantalla
+        glm::mat4 modelPantalla = glm::mat4(1.0f);
+        modelPantalla = glm::translate(modelPantalla, glm::vec3(-0.4f, 0.0f, 1.5f));
+        modelPantalla = glm::rotate(modelPantalla, glm::radians(80.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelPantalla = glm::scale(modelPantalla, glm::vec3(0.1f, 0.1f, 0.1f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPantalla));
+        pantalla.Draw(shader);
 
 
         // Swap the buffers
