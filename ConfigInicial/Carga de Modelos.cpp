@@ -107,7 +107,9 @@ int main( )
     
     Model perro((char*)"Models/RedDog.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
     Model pantalla((char*)"Models/SCREEN.obj");
-    
+    Model laptop((char*)"Models/Laptop.obj");
+	Model teclado((char*)"Models/keyboard.obj");
+	Model lata((char*)"Models/crushed_can.obj");
     Model mesa((char*)"Models/Office_Table.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
@@ -138,13 +140,13 @@ int main( )
         // Draw the loaded model
         glm::mat4 modelPerro = glm::mat4(1.0f);
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPerro));
-		perro.Draw(shader);
-        
+        perro.Draw(shader);
+
         // Aplicando las transformaciones previamente vistas al modelo
         glm::mat4 modelMesa = glm::mat4(1.0f);
-		modelMesa = glm::rotate(modelMesa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelMesa = glm::rotate(modelMesa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         modelMesa = glm::translate(modelMesa, glm::vec3(0.0f, -0.5f, -1.0f));
-		modelMesa = glm::scale(modelMesa, glm::vec3(1.5f, 1.5f, 1.5f));
+        modelMesa = glm::scale(modelMesa, glm::vec3(1.5f, 1.5f, 1.5f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelMesa));
         mesa.Draw(shader);
 
@@ -155,6 +157,30 @@ int main( )
         modelPantalla = glm::scale(modelPantalla, glm::vec3(0.1f, 0.1f, 0.1f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPantalla));
         pantalla.Draw(shader);
+
+        // Dibujando la laptop
+        glm::mat4 modelLaptop = glm::mat4(1.0f);
+        modelLaptop = glm::translate(modelLaptop, glm::vec3(0.7f, 0.7f, 1.1f));
+        modelLaptop = glm::rotate(modelLaptop, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelLaptop = glm::scale(modelLaptop, glm::vec3(0.1f, 0.1f, 0.1f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLaptop));
+        laptop.Draw(shader);
+
+		// Dibujando el teclado
+        glm::mat4 modelTeclado = glm::mat4(1.0f);
+        modelTeclado = glm::translate(modelTeclado, glm::vec3(0.1f, 0.7f, 0.7f));
+        //modelTeclado = glm::rotate(modelTeclado, glm::radians(80.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelTeclado = glm::scale(modelTeclado, glm::vec3(0.15f, 0.15f, 0.15f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTeclado));
+        teclado.Draw(shader);
+
+		// Dibujando la lata
+        glm::mat4 modelLata = glm::mat4(1.0f);
+        modelLata = glm::translate(modelLata, glm::vec3(-0.6f, 0.65f, 0.7f));
+        modelLata = glm::rotate(modelLata, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelLata = glm::scale(modelLata, glm::vec3(0.01f, 0.01f, 0.01f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLata));
+        lata.Draw(shader);
 
 
         // Swap the buffers
