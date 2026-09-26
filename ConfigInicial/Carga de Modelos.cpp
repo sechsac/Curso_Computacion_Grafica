@@ -1,6 +1,6 @@
 // Práctica 6. Carga de modelos y cámara sintética
 // Hernández Castro Laura Isabel
-// Fecha: 21/09/2026
+// Fecha: 25/09/2026
 // No. de cuenta: 320293634
 
 
@@ -110,6 +110,7 @@ int main( )
     Model laptop((char*)"Models/Laptop.obj");
 	Model teclado((char*)"Models/keyboard.obj");
 	Model lata((char*)"Models/crushed_can.obj");
+	Model silla((char*)"Models/chair.obj"); 
     Model mesa((char*)"Models/Office_Table.obj"); // sólo se carga el modelo porque dentro lleva el material, y en el material viene la textura
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
@@ -139,6 +140,9 @@ int main( )
 
         // Draw the loaded model
         glm::mat4 modelPerro = glm::mat4(1.0f);
+        modelPerro = glm::translate(modelPerro, glm::vec3(-0.2f, 1.1f, 0.2f));
+        //modelPerro = glm::rotate(modelPerro, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        //modelPerro = glm::scale(modelPerro, glm::vec3(0.01f, 0.01f, 0.01f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPerro));
         perro.Draw(shader);
 
@@ -176,11 +180,19 @@ int main( )
 
 		// Dibujando la lata
         glm::mat4 modelLata = glm::mat4(1.0f);
-        modelLata = glm::translate(modelLata, glm::vec3(-0.6f, 0.65f, 0.7f));
+        modelLata = glm::translate(modelLata, glm::vec3(-0.6f, 0.66f, 0.7f));
         modelLata = glm::rotate(modelLata, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         modelLata = glm::scale(modelLata, glm::vec3(0.01f, 0.01f, 0.01f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLata));
         lata.Draw(shader);
+
+		// Dibujando la silla
+        glm::mat4 modelSilla = glm::mat4(1.0f);
+        //modelSilla = glm::translate(modelSilla, glm::vec3(-0.6f, 0.66f, 0.7f));
+        modelSilla = glm::rotate(modelSilla, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelSilla = glm::scale(modelSilla, glm::vec3(0.05f, 0.05f, 0.05f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSilla));
+        silla.Draw(shader);
 
 
         // Swap the buffers
