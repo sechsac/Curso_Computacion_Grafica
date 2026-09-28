@@ -1,3 +1,23 @@
+// Previo 7. Texturizado
+// Hernández Castro Laura Isabel
+// Fecha: 27/09/2026
+// No. de cuenta: 320293634
+
+
+
+/*
+* 
+PARA COMPILAR BIEN LAS TEXTURAS CON TRANSPARENCIA, SE HICIERON MODIFICACIONES
+EN EL LAMP.VS, LINEA 17
+
+TexCoord=inTexCoord; => TexCoord=vec2(inTexCoord.x,inTexCoord.y);
+  SIN TRANSPARENCIA  =>			CON TRANSPARENCIA
+
+*/
+
+
+
+
 
 #include <iostream>
 #include <cmath>
@@ -57,7 +77,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Texturizado", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 7. Texturizado - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -93,18 +113,29 @@ int main()
 	// OpenGL options
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// INCORPORACIÓN DE LOS NUEVOS SHADERS
 	// Build and compile our shader program
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 
+
+	// DEFINICIÓN DE LOS VERTICES DE LAS UVs
+	// U = eje horizontal
+	// V = eje vertical
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
 	{
 		// Positions            // Colors              // Texture Coords
-		-0.5f, -0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.0f,0.0f,
+		-0.5f, -0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.0f,0.0f,	// para recorrer la textura
 		0.5f, -0.5f, 0.0f,	   1.0f, 1.0f,1.0f,		1.0f,0.0f,
-		0.5f,  0.5f, 0.0f,     1.0f, 1.0f,1.0f,	    1.0f,1.0f,
-		-0.5f,  0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.0f,1.0f,
+		0.5f,  0.5f, 0.0f,     1.0f, 1.0f,1.0f,	    1.0f,2.0f,
+		-0.5f,  0.5f, 0.0f,    1.0f, 1.0f,1.0f,		2.0f,1.0f,
+		// De aquí se parte							De aquí se parte
+		// de que el origen							de que el origen
+		// está en el centro						es el de las UVs
+		// de la pantalla							(en la esquina inferior izquierda)
 
 		
 	};
@@ -141,24 +172,29 @@ int main()
 	glBindVertexArray(0);
 
 	// Load textures
-	GLuint texture1;
+	GLuint texture1;  // identificador de la textura
 	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D,texture1);
-	int textureWidth, textureHeight,nrChannels;
-	stbi_set_flip_vertically_on_load(true);
+	glBindTexture(GL_TEXTURE_2D, texture1); // enlaza la textura en 2D con el identificador
+	int textureWidth, textureHeight, nrChannels; // para guardar los parámetros de la textura
+	stbi_set_flip_vertically_on_load(true); // invierte la textura (para que empiece desde la esquina inferior izquierda)
 	unsigned char *image;
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	// Diffuse map
-	image = stbi_load("images/checker_Tex.png", &textureWidth, &textureHeight, &nrChannels,0);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	// STBI_rgb_alpha en vez de 0 para que se cargue la textura con transparencia
+	image = stbi_load("images/bolsa.png", &textureWidth, &textureHeight, &nrChannels, STBI_rgb_alpha); // carga la textura desde el archivo, el ancho y alto, y el número de canales que se van a usar (0 = todos los canales)
+	glBindTexture(GL_TEXTURE_2D, texture1); // enlaza la textura en 2D con el identificador
+	// se convierte la imagen en una textura
+	// GL_RGBA PARA IMAGENES CON TRANSPARENCIA
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	// generando el mipmap (optimiza la textura para que se vea bien a diferentes distancias)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	if (image)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+		// GL_RGBA PARA IMAGENES CON TRANSPARENCIA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -185,7 +221,7 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		lampShader.Use();
+		lampShader.Use(); // ACTIVCION DEL SHADER (IMPORTANTE)
 		//// Create camera transformations
 		glm::mat4 view;
 		view = camera.GetViewMatrix();
@@ -198,8 +234,8 @@ int main()
 		GLint projLoc = glGetUniformLocation(lampShader.Program, "projection");
 
 		// Bind diffuse map
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE0); // ACTIVACION DE LA TEXTURA
+		glBindTexture(GL_TEXTURE_2D, texture1); // asociando el identificador al tipo de textura
 
 		// Set matrices
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
