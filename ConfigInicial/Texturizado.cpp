@@ -77,7 +77,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 7. Texturizado - Hernandez Castro Laura Isabel", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 7. Texturizado - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -127,23 +127,81 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
 	{
+		// 3 - Azul
+		-0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.745f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.745f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.975f,
+		-0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.975f,
+		
+		
+		// 1 - Verde
+		-0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.515f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.515f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.745f,
+		-0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.745f,
+
+
+		// 4 - Amarillo
+		-0.5f,	-0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.280f,
+		 0.5f,	-0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.280f,
+		 0.5f,	 0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.510f,
+		-0.5f,   0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.510f,
+
+		
+		// 6 - Rojo
+		-0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.050f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.050f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.640f, 0.280f,
+		-0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.355f, 0.280f,
+
+		// 2 - Naranja
+		-0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.065f, 0.280f,//
+		-0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.350f, 0.280f,
+		-0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.350f, 0.510f,
+		-0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	0.065f, 0.510f,//
+/*
+		// 5 - Rosa
+		 0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.666f, 0.25f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	1.000f, 0.25f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 1.0f,	1.000f, 0.50f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f,	0.666f, 0.50f
+*/
+
+
+		
+		/*
 		// Positions            // Colors              // Texture Coords
-		-0.5f, -0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.0f,0.0f,	// para recorrer la textura
-		0.5f, -0.5f, 0.0f,	   1.0f, 1.0f,1.0f,		1.0f,0.0f,
-		0.5f,  0.5f, 0.0f,     1.0f, 1.0f,1.0f,	    1.0f,2.0f,
-		-0.5f,  0.5f, 0.0f,    1.0f, 1.0f,1.0f,		2.0f,1.0f,
+		-0.5f, -0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.5f,0.0f,	// para recorrer la textura
+		0.5f, -0.5f, 0.0f,	   1.0f, 1.0f,1.0f,		0.5f,0.0f,
+		0.5f,  0.5f, 0.0f,     1.0f, 1.0f,1.0f,	    1.0f,1.0f,
+		-0.5f,  0.5f, 0.0f,    1.0f, 1.0f,1.0f,		0.0f,1.0f,
 		// De aquí se parte							De aquí se parte
 		// de que el origen							de que el origen
 		// está en el centro						es el de las UVs
 		// de la pantalla							(en la esquina inferior izquierda)
-
+*/
 		
 	};
 
 	GLuint indices[] =
 	{  // Note that we start from 0!
-		0,1,3,
-		1,2,3
+		// Cara 1
+		0, 1, 2,   2, 3, 0,
+
+		// Cara 2
+		4, 5, 6,   6, 7, 4,
+
+		// Cara 3
+		8, 9, 10,  10, 11, 8,
+
+		// Cara 4
+		12, 13, 14, 14, 15, 12,
+
+		// Cara 5
+		16, 17, 18, 18, 19, 16,
+
+		// Cara 6
+		20, 21, 22, 22, 23, 20
 	
 	};
 
@@ -184,7 +242,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	// Diffuse map
 	// STBI_rgb_alpha en vez de 0 para que se cargue la textura con transparencia
-	image = stbi_load("images/bolsa.png", &textureWidth, &textureHeight, &nrChannels, STBI_rgb_alpha); // carga la textura desde el archivo, el ancho y alto, y el número de canales que se van a usar (0 = todos los canales)
+	image = stbi_load("images/dado.jpg", &textureWidth, &textureHeight, &nrChannels, STBI_rgb_alpha); // carga la textura desde el archivo, el ancho y alto, y el número de canales que se van a usar (0 = todos los canales)
 	glBindTexture(GL_TEXTURE_2D, texture1); // enlaza la textura en 2D con el identificador
 	// se convierte la imagen en una textura
 	// GL_RGBA PARA IMAGENES CON TRANSPARENCIA
@@ -243,7 +301,9 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		// Draw the light object (using light's vertex attributes)
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		// SE CAMBIA EL VALOR DE 6 A 36 PARA PODER DIBUJAR TODAS LAS CARAS DEL CUBO
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		// Swap the screen buffers
