@@ -107,8 +107,12 @@ int main()
 
 
     // Load models
-    Model red_dog((char*)"Models/RedDog.obj");
+   /* Model red_dog((char*)"Models/RedDog.obj");
     glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+*/
+    Model can((char*)"Models/crushed_can.obj");
+    glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
 
     float vertices[] = {
 		// Primeros tres vértices son para las 3 coordenadas de posición (x, y, z)
@@ -183,7 +187,10 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 
-    image = stbi_load("Models/Texture_albedo.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+    //image = stbi_load("Models/Texture_albedo.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+    
+    image = stbi_load("Models/can_crushed_lowpoly_BaseColor_Opacity_2k.png", &textureWidth, &textureHeight, &nrChannels, 0);
+    
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     if (image)
@@ -234,9 +241,9 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // Set material properties
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.5f, 0.5f, 0.5f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.7f, 0.2f, 0.4f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.6f, 0.6f, 0.6f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.1f, 0.1f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.5f, 0.3f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.1f, 0.1f, 0.1f);
         glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 0.0f);
 
 
@@ -249,7 +256,9 @@ int main()
         glBindVertexArray(VAO);
        
         // Aplicando iluminación al modelo cargado
-		red_dog.Draw(lightingShader);
+		//red_dog.Draw(lightingShader);
+        can.Draw(lightingShader);
+
 
         //glDrawArrays(GL_TRIANGLES, 0, 36);
         
@@ -264,8 +273,9 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos + movelightPos);
-        model = glm::scale(model, glm::vec3(0.3f));
+        model = glm::scale(model, glm::vec3(10.0f));
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
