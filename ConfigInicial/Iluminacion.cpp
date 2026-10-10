@@ -83,14 +83,18 @@ bool keys[1024];
 GLfloat lastX = 400.0f, lastY = 300.0f;
 bool firstMouse = true;
 
-// Light attributes
-glm::vec3 lightPos(0.5f, 0.5f, 2.5f); // Posición de la luna
-glm::vec3 sunPos(-2.5f, 2.0f, -1.0f); // Posición del sol
-float movelightPos = 0.0f;           // Variable para mover la luz
+// Light & Orbit attributes
+glm::vec3 lightPos(0.5f, 0.5f, 2.5f);  // Posición inicial
+glm::vec3 sunPos(-2.5f, 2.0f, -1.0f);  // Posición inicial
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 float rot = 0.0f;
 bool activanim = false;
+
+// Centro de la órbita (Posición del perro) y parámetros del círculo
+glm::vec3 dogPos(-0.2f, 1.1f, 0.2f);
+float orbitRadius = 2.5f;              // Radio de órbita idéntico para ambos
+float movelightPos = 0.0f;             // Ángulo de rotación (en radianes)
 
 int main()
 {
@@ -274,6 +278,21 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // ==============================================================
+        // CÁLCULO DE ÓRBITA CIRCULAR ALREDEDOR DEL PERRO
+        // ==============================================================
+        // Posición de la Luna en el círculo (X, Z)
+        glm::vec3 currentLightPos;
+        currentLightPos.x = dogPos.x + orbitRadius * cos(movelightPos);
+        currentLightPos.y = dogPos.y + 1.0f; // Un poco por encima del perro
+        currentLightPos.z = dogPos.z + orbitRadius * sin(movelightPos);
+
+        // Posición del Sol (Desfasado 180 grados para estar opuesto)
+        glm::vec3 currentSunPos;
+        currentSunPos.x = dogPos.x + orbitRadius * cos(movelightPos + 3.14159265f);
+        currentSunPos.y = dogPos.y + 1.0f;
+        currentSunPos.z = dogPos.z + orbitRadius * sin(movelightPos + 3.14159265f);
+
+        // ==============================================================
         // DIBUJADO DE MODELOS CON ILUMINACIÓN
         // ==============================================================
         lightingShader.Use();
@@ -289,7 +308,6 @@ int main()
         // --------------------------------------------------------
         // Luz de la LUNA (Fría / Neutra / Blanca)
         // --------------------------------------------------------
-        glm::vec3 currentLightPos = glm::vec3(lightPos.x + movelightPos, lightPos.y, lightPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.position"), currentLightPos.x, currentLightPos.y, currentLightPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.ambient"), 0.1f, 0.15f, 0.2f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.diffuse"), 0.4f, 0.5f, 0.6f);
@@ -298,7 +316,7 @@ int main()
         // --------------------------------------------------------
         // Luz del SOL (Cálida / Amarillenta / Dorada)
         // --------------------------------------------------------
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.position"), sunPos.x, sunPos.y, sunPos.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.position"), currentSunPos.x, currentSunPos.y, currentSunPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.ambient"), 0.3f, 0.2f, 0.1f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.diffuse"), 1.0f, 0.75f, 0.3f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.specular"), 1.0f, 0.9f, 0.6f);
@@ -341,7 +359,7 @@ int main()
 
         // --- Teclado ---
         glm::mat4 modelTeclado = glm::mat4(1.0f);
-        modelTeclado = glm::translate(modelTeclado, glm::vec3(0.1f, 0.5f, 0.3f));
+        modelTeclado = glm::translate(modelTeclado, glm::vec3(0.1f, 0.7f, 0.7f));
         modelTeclado = glm::scale(modelTeclado, glm::vec3(0.15f, 0.15f, 0.15f));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTeclado));
         teclado.Draw(lightingShader);
@@ -371,7 +389,7 @@ int main()
         // --- DIBUJAR LA LUNA ---
         glm::mat4 modelLamp = glm::mat4(1.0f);
         modelLamp = glm::translate(modelLamp, currentLightPos);
-        modelLamp = glm::scale(modelLamp, glm::vec3(0.2f));
+        modelLamp = glm::scale(modelLamp, glm::vec3(0.8f)); 
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLamp));
 
         glActiveTexture(GL_TEXTURE0);
@@ -380,32 +398,21 @@ int main()
 
         luna.Draw(lampshader);
 
-
-        glBindTexture(GL_TEXTURE_2D, 0); // Limpiar la unidad de textura
-
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         // --- DIBUJAR EL SOL ---
-        lampshader.Use();
-
         glm::mat4 modelSun = glm::mat4(1.0f);
-        modelSun = glm::translate(modelSun, currentLightPos);
-        modelSun = glm::scale(modelSun, glm::vec3(0.3f));
+        modelSun = glm::translate(modelSun, currentSunPos);
+        modelSun = glm::scale(modelSun, glm::vec3(0.2f)); // Cambiado de 0.3f a 0.2f para igualar tamaño
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSun));
 
-        // 1. Activar la unidad de textura 0
         glActiveTexture(GL_TEXTURE0);
-
-        // 2. Enlazar explícitamente tu sunTexture cargada con STB
         glBindTexture(GL_TEXTURE_2D, sunTexture);
-
-        // 3. Informar al shader que la textura está en la unidad 0
         glUniform1i(glGetUniformLocation(lampshader.Program, "texture_diffuse1"), 0);
 
-        // 4. Dibujar la geometría del sol
         sol.Draw(lampshader);
 
-
-
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         glBindVertexArray(VAO);
         glBindVertexArray(0);
@@ -468,12 +475,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
     if (keys[GLFW_KEY_O])
     {
-        movelightPos += 0.1f;
+        movelightPos += 2.5f * deltaTime; // Órbita en sentido horario
     }
 
     if (keys[GLFW_KEY_L])
     {
-        movelightPos -= 0.1f;
+        movelightPos -= 2.5f * deltaTime; // Órbita en sentido antihorario
     }
 }
 

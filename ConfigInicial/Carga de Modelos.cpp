@@ -233,7 +233,7 @@ int main( )
         // Dibujando la laptop
         glm::mat4 modelLaptop = glm::mat4(1.0f);
         modelLaptop = glm::translate(modelLaptop, glm::vec3(0.7f, 0.7f, 1.1f));
-        modelLaptop = glm::rotate(modelLaptop, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelLaptop = glm::rotate(modelLaptop, glm::radians(80.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         modelLaptop = glm::scale(modelLaptop, glm::vec3(0.1f, 0.1f, 0.1f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLaptop));
         laptop.Draw(shader);
