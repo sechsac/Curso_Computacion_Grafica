@@ -1,10 +1,50 @@
 // Práctica 8. Materiales e iluminacion
 // Hernández Castro Laura Isabel
-// Fecha: 05/10/2026
+// Fecha: 09/10/2026
 // No. de cuenta: 320293634
 
 
-// Std. Includes
+
+    /*GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    int textureWidth, textureHeight, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* image;
+    unsigned char* image2;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+    image = stbi_load("Models/Image_0.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+    image2 = stbi_load("Models/Image_0.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    if (image)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(image);
+
+    if (image2)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(image2);*/
+
+    // Std. Includes
 #include <string>
 #include <iostream>
 
@@ -44,7 +84,8 @@ GLfloat lastX = 400.0f, lastY = 300.0f;
 bool firstMouse = true;
 
 // Light attributes
-glm::vec3 lightPos(0.5f, 0.5f, 2.5f); // Posición de la luz
+glm::vec3 lightPos(0.5f, 0.5f, 2.5f); // Posición de la luna
+glm::vec3 sunPos(-2.5f, 2.0f, -1.0f); // Posición del sol
 float movelightPos = 0.0f;           // Variable para mover la luz
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -62,7 +103,7 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Create a GLFWwindow object
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 8. Materiales e Iluminacion", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 8. Materiales e Iluminacion - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
     if (nullptr == window)
     {
@@ -104,6 +145,57 @@ int main()
     Model silla((char*)"Models/chair.obj");
     Model mesa((char*)"Models/Office_Table.obj");
     Model luna((char*)"Models/Moon.obj");
+    Model sol((char*)"Models/sun.obj");
+
+    // ==============================================================
+    // CARGA DE TEXTURAS (FUERA DEL BUCLE WHILE)
+    // ==============================================================
+    stbi_set_flip_vertically_on_load(true);
+    int texWidth, texHeight, nrChannels;
+
+    // --- 1. Textura de la Luna ---
+    GLuint moonTexture;
+    glGenTextures(1, &moonTexture);
+    glBindTexture(GL_TEXTURE_2D, moonTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    unsigned char* moonImg = stbi_load("Models/Image_0.png", &texWidth, &texHeight, &nrChannels, 0);
+    if (moonImg)
+    {
+        GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, format, texWidth, texHeight, 0, format, GL_UNSIGNED_BYTE, moonImg);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(moonImg);
+    }
+    else
+    {
+        std::cout << "Error al cargar la textura de la luna (Models/Image_0.png)" << std::endl;
+    }
+
+    // --- 2. Textura del Sol ---
+    GLuint sunTexture;
+    glGenTextures(1, &sunTexture);
+    glBindTexture(GL_TEXTURE_2D, sunTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    unsigned char* sunImg = stbi_load("Models/sun.jpg", &texWidth, &texHeight, &nrChannels, 0);
+    if (sunImg)
+    {
+        GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, format, texWidth, texHeight, 0, format, GL_UNSIGNED_BYTE, sunImg);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(sunImg);
+    }
+    else
+    {
+        std::cout << "Error al cargar la textura del sol (Models/sol.jpg)" << std::endl;
+    }
 
     // Vértices del cubo indicador de luz
     float vertices[] = {
@@ -165,47 +257,6 @@ int main()
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    int textureWidth, textureHeight, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* image;
-    unsigned char* image2;
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-
-    image = stbi_load("Models/Image_0.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
-    image2 = stbi_load("Models/Image_0.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    if (image)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(image);
-
-    if (image2)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(image2);
-
-
-
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -227,22 +278,32 @@ int main()
         // ==============================================================
         lightingShader.Use();
 
-        // Proyección y Vista
+        // Matrices View y Projection
         glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-
-        // Uniforms de Luz y Material
-        glm::vec3 currentLightPos = glm::vec3(lightPos.x + movelightPos, lightPos.y, lightPos.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.position"), currentLightPos.x, currentLightPos.y, currentLightPos.z);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "viewPos"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
 
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.3f, 0.3f, 0.3f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 0.8f, 0.8f, 0.8f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 1.0f);
+        // --------------------------------------------------------
+        // Luz de la LUNA (Fría / Neutra / Blanca)
+        // --------------------------------------------------------
+        glm::vec3 currentLightPos = glm::vec3(lightPos.x + movelightPos, lightPos.y, lightPos.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.position"), currentLightPos.x, currentLightPos.y, currentLightPos.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.ambient"), 0.1f, 0.15f, 0.2f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.diffuse"), 0.4f, 0.5f, 0.6f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightMoon.specular"), 0.5f, 0.5f, 0.6f);
 
+        // --------------------------------------------------------
+        // Luz del SOL (Cálida / Amarillenta / Dorada)
+        // --------------------------------------------------------
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.position"), sunPos.x, sunPos.y, sunPos.z);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.ambient"), 0.3f, 0.2f, 0.1f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.diffuse"), 1.0f, 0.75f, 0.3f);
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "lightSun.specular"), 1.0f, 0.9f, 0.6f);
+
+        // Material general de los objetos
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.2f, 0.2f, 0.2f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.6f, 0.6f, 0.6f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.5f, 0.5f, 0.5f);
@@ -251,11 +312,8 @@ int main()
         // --- Perro ---
         glm::mat4 modelPerro = glm::mat4(1.0f);
         modelPerro = glm::translate(modelPerro, glm::vec3(-0.2f, 1.1f, 0.2f));
-        //modelPerro = glm::rotate(modelPerro, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        //modelPerro = glm::scale(modelPerro, glm::vec3(0.01f, 0.01f, 0.01f));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPerro));
         perro.Draw(lightingShader);
-
 
         // --- Mesa ---
         glm::mat4 modelMesa = glm::mat4(1.0f);
@@ -265,7 +323,6 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelMesa));
         mesa.Draw(lightingShader);
 
-
         // --- Pantalla ---
         glm::mat4 modelPantalla = glm::mat4(1.0f);
         modelPantalla = glm::translate(modelPantalla, glm::vec3(-0.4f, 0.0f, 1.5f));
@@ -273,7 +330,6 @@ int main()
         modelPantalla = glm::scale(modelPantalla, glm::vec3(0.1f, 0.1f, 0.1f));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPantalla));
         pantalla.Draw(lightingShader);
-
 
         // --- Laptop ---
         glm::mat4 modelLaptop = glm::mat4(1.0f);
@@ -283,14 +339,12 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLaptop));
         laptop.Draw(lightingShader);
 
-
         // --- Teclado ---
         glm::mat4 modelTeclado = glm::mat4(1.0f);
         modelTeclado = glm::translate(modelTeclado, glm::vec3(0.1f, 0.5f, 0.3f));
         modelTeclado = glm::scale(modelTeclado, glm::vec3(0.15f, 0.15f, 0.15f));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTeclado));
         teclado.Draw(lightingShader);
-
 
         // --- Lata ---
         glm::mat4 modelLata = glm::mat4(1.0f);
@@ -300,31 +354,60 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLata));
         lata.Draw(lightingShader);
 
-
         // --- Silla ---
         glm::mat4 modelSilla = glm::mat4(1.0f);
-        //modelSilla = glm::translate(modelSilla, glm::vec3(0.0f, -0.5f, 1.2f));
         modelSilla = glm::rotate(modelSilla, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         modelSilla = glm::scale(modelSilla, glm::vec3(0.05f, 0.05f, 0.05f));
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSilla));
         silla.Draw(lightingShader);
 
-
         // ==============================================================
-        // DIBUJADO DE LA LÁMPARA
+        // DIBUJADO DE EMISORES (LUNA Y SOL)
         // ==============================================================
         lampshader.Use();
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
+        // --- DIBUJAR LA LUNA ---
         glm::mat4 modelLamp = glm::mat4(1.0f);
         modelLamp = glm::translate(modelLamp, currentLightPos);
         modelLamp = glm::scale(modelLamp, glm::vec3(0.2f));
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLamp));
-        luna.Draw(lightingShader);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, moonTexture);
+        glUniform1i(glGetUniformLocation(lampshader.Program, "texture_diffuse1"), 0);
+
+        luna.Draw(lampshader);
+
+
+        glBindTexture(GL_TEXTURE_2D, 0); // Limpiar la unidad de textura
+
+
+        // --- DIBUJAR EL SOL ---
+        lampshader.Use();
+
+        glm::mat4 modelSun = glm::mat4(1.0f);
+        modelSun = glm::translate(modelSun, currentLightPos);
+        modelSun = glm::scale(modelSun, glm::vec3(0.3f));
+        glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSun));
+
+        // 1. Activar la unidad de textura 0
+        glActiveTexture(GL_TEXTURE0);
+
+        // 2. Enlazar explícitamente tu sunTexture cargada con STB
+        glBindTexture(GL_TEXTURE_2D, sunTexture);
+
+        // 3. Informar al shader que la textura está en la unidad 0
+        glUniform1i(glGetUniformLocation(lampshader.Program, "texture_diffuse1"), 0);
+
+        // 4. Dibujar la geometría del sol
+        sol.Draw(lampshader);
+
+
+
 
         glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
         // Swap buffers
