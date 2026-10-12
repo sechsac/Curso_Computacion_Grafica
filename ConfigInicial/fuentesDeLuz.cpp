@@ -1,7 +1,7 @@
-// Previo 9. Fuentes de Luz
+// Práctica 9. Fuentes de Luz
 // Hernández Cstro Laura Isabel
 // No. de cuenta: 320293634
-// Fecha: 11/10/2026
+// Fecha: 12/10/2026
 
 
 // SE MODIFICA EL SHADER DE FRAGMENTOS, NO EL DE VERTICES
@@ -126,7 +126,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 9. Fuentes de luz - Hernandez Castro Laura Isabel", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 9. Fuentes de luz - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -173,8 +173,16 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-	Model Dog((char*)"Models/glass.obj");
-	Model Piso((char*)"Models/piso.obj");
+	Model perro((char*)"Models/RedDog.obj");
+	//Model Piso((char*)"Models/piso.obj");
+
+	Model pantalla((char*)"Models/SCREEN.obj");
+	Model laptop((char*)"Models/Laptop.obj");
+	Model teclado((char*)"Models/keyboard.obj");
+	Model lata((char*)"Models/crushed_can.obj");
+	Model silla((char*)"Models/chair.obj");
+	Model mesa((char*)"Models/Office_Table.obj");
+	Model lampara((char*)"Models/Lamp2.obj");
 
 
 
@@ -220,14 +228,14 @@ int main()
 	unsigned char* vasoImg = stbi_load("Models/vaso.png", &texWidth, &texHeight, &nrChannels, 0);
 	if (vasoImg)
 	{
-		std::cout << "Ancho: " << texWidth << ", Alto: " << texHeight << ", Canales: " << nrChannels << std::endl;
+		//std::cout << "Ancho: " << texWidth << ", Alto: " << texHeight << ", Canales: " << nrChannels << std::endl;
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Evita desalineaciones de memoria
 		GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
 		glTexImage2D(GL_TEXTURE_2D, 0, format, texWidth, texHeight, 0, format, GL_UNSIGNED_BYTE, vasoImg);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(vasoImg);
-		std::cout << "Textura vaso.png cargada con éxito!" << std::endl;
+		//std::cout << "Textura vaso.png cargada con éxito!" << std::endl;
 	}
 	else
 	{
@@ -260,10 +268,6 @@ int main()
 	   
 		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
-
-		
-		
-		//Load Model
 	
 
 		// Use cooresponding shader when setting uniforms/drawing objects
@@ -279,7 +283,7 @@ int main()
 		// Directional light
 		// DEFINICION DE LA LUZ DIRECCIONAL
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f); // Hacia dónde apunta la luz
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.5f,0.5f,0.5f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),1.0f,1.0f,1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.05f, 0.05f, 0.05f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.3f, 0.3f, 0.3f);
 
@@ -338,8 +342,8 @@ int main()
 
 		// SpotLight
 		// PARA CONFIGURAR UNA LUZ TIPO REFLECTOR
-		// Posición del spotlight (dónde está colocada la fuente de luz) - se usa la cámara para que la luz se mueva con ella
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+		// Posición del spotlight (dónde está colocada la fuente de luz) - se usa la cámara para que la luz se mueva con ella -0.6f, 0.66f, 1.15f
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), -0.6f, 0.66f, 1.15f);
 		// Dirección del spotlight (hacia dónde apunta la luz) - se usa la cámara para que la luz se mueva con ella
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), camera.GetFront().x, camera.GetFront().y, camera.GetFront().z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), 0.2f, 0.2f, 0.8f);
@@ -377,10 +381,72 @@ int main()
 	
 
 		//Carga de modelo 
-        view = camera.GetViewMatrix();	
-		model = glm::mat4(1);
+        view = camera.GetViewMatrix();
+
+		// --- Perro ---
+		glm::mat4 modelPerro = glm::mat4(1.0f);
+		modelPerro = glm::translate(modelPerro, glm::vec3(-0.2f, 1.1f, 0.2f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPerro));
+		perro.Draw(lightingShader);
+
+		// --- Mesa ---
+		glm::mat4 modelMesa = glm::mat4(1.0f);
+		modelMesa = glm::rotate(modelMesa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMesa = glm::translate(modelMesa, glm::vec3(0.0f, -0.5f, -1.0f));
+		modelMesa = glm::scale(modelMesa, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelMesa));
+		mesa.Draw(lightingShader);
+
+		// --- Pantalla ---
+		glm::mat4 modelPantalla = glm::mat4(1.0f);
+		modelPantalla = glm::translate(modelPantalla, glm::vec3(-0.4f, 0.0f, 1.5f));
+		modelPantalla = glm::rotate(modelPantalla, glm::radians(80.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelPantalla = glm::scale(modelPantalla, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPantalla));
+		pantalla.Draw(lightingShader);
+
+		// --- Laptop ---
+		glm::mat4 modelLaptop = glm::mat4(1.0f);
+		modelLaptop = glm::translate(modelLaptop, glm::vec3(0.7f, 0.7f, 1.1f));
+		modelLaptop = glm::rotate(modelLaptop, glm::radians(80.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelLaptop = glm::scale(modelLaptop, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLaptop));
+		laptop.Draw(lightingShader);
+
+		// --- Teclado ---
+		glm::mat4 modelTeclado = glm::mat4(1.0f);
+		modelTeclado = glm::translate(modelTeclado, glm::vec3(0.1f, 0.7f, 0.7f));
+		modelTeclado = glm::scale(modelTeclado, glm::vec3(0.15f, 0.15f, 0.15f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTeclado));
+		teclado.Draw(lightingShader);
+
+		// --- Lata ---
+		glm::mat4 modelLata = glm::mat4(1.0f);
+		modelLata = glm::translate(modelLata, glm::vec3(-0.6f, 0.66f, 0.7f));
+		modelLata = glm::rotate(modelLata, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelLata = glm::scale(modelLata, glm::vec3(0.01f, 0.01f, 0.01f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLata));
+		lata.Draw(lightingShader);
+
+		// --- Silla ---
+		glm::mat4 modelSilla = glm::mat4(1.0f);
+		modelSilla = glm::rotate(modelSilla, glm::radians(110.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelSilla = glm::scale(modelSilla, glm::vec3(0.05f, 0.05f, 0.05f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSilla));
+		silla.Draw(lightingShader);
+
+		// --- Lámpara ---
+		glm::mat4 modelLampara = glm::mat4(1.0f);
+		modelLampara = glm::translate(modelLampara, glm::vec3(-0.6f, 0.66f, 1.15f));
+		modelLampara = glm::rotate(modelLampara, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelLampara = glm::scale(modelLampara, glm::vec3(0.045f, 0.05f, 0.045f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLampara));
+		lampara.Draw(lightingShader);
+
+
+		/*model = glm::mat4(1);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Piso.Draw(lightingShader);
+		Piso.Draw(lightingShader);*/
 
 
 
@@ -391,7 +457,7 @@ int main()
 		// EL FORMATO PNG CONSERVA EL CANAL ALFA PARA USAR LA TRANSPARENCIA
 
 		model = glm::mat4(1);
-		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
+		//glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -409,8 +475,8 @@ int main()
 		// se envía 0 para que no se aplique transparencia y 1 para que sí se aplique
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
 		
-	    Dog.Draw(lightingShader);
-		glDisable(GL_BLEND);  //Desactiva el canal alfa 
+	    perro.Draw(lightingShader);
+		//glDisable(GL_BLEND);  //Desactiva el canal alfa 
 		glBindVertexArray(0);
 	
 
