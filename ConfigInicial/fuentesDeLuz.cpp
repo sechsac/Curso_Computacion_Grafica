@@ -136,6 +136,15 @@ int main()
 		return EXIT_FAILURE;
 	}
 
+
+
+	
+
+
+
+
+
+
 	glfwMakeContextCurrent(window);
 
 	glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
@@ -164,7 +173,7 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-	Model Dog((char*)"Models/ball.obj");
+	Model Dog((char*)"Models/glass.obj");
 	Model Piso((char*)"Models/piso.obj");
 
 
@@ -190,6 +199,47 @@ int main()
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.specular"), 1);
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 100.0f);
+	
+	
+	
+	
+	
+	// --- Textura del Vaso (vaso.png) ---
+	GLuint vasoTexture;
+	glGenTextures(1, &vasoTexture);
+	glBindTexture(GL_TEXTURE_2D, vasoTexture);
+
+	// Configurar los parámetros de wrap y filtros
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int texWidth, texHeight, nrChannels;
+	// Asegúrate de que la ruta coincida con donde guardaste tu imagen
+	unsigned char* vasoImg = stbi_load("Models/vaso.png", &texWidth, &texHeight, &nrChannels, 0);
+	if (vasoImg)
+	{
+		std::cout << "Ancho: " << texWidth << ", Alto: " << texHeight << ", Canales: " << nrChannels << std::endl;
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Evita desalineaciones de memoria
+		GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(GL_TEXTURE_2D, 0, format, texWidth, texHeight, 0, format, GL_UNSIGNED_BYTE, vasoImg);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(vasoImg);
+		std::cout << "Textura vaso.png cargada con éxito!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Error al cargar la textura de la imagen (Models/vaso.png)" << std::endl;
+	}
+
+
+
+
+
+
+
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -219,7 +269,7 @@ int main()
 		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
 
-                  glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
+        glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
 		//glUniform1i(glGetUniformLocation(lightingShader.Program, "specular"),1);
 
 		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
@@ -229,7 +279,7 @@ int main()
 		// Directional light
 		// DEFINICION DE LA LUZ DIRECCIONAL
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f); // Hacia dónde apunta la luz
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.05f,0.05f,0.05f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.5f,0.5f,0.5f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.05f, 0.05f, 0.05f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.3f, 0.3f, 0.3f);
 
@@ -343,11 +393,22 @@ int main()
 		model = glm::mat4(1);
 		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		model = glm::scale(model, glm::vec3(0.2f));
+
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		// 1. Activa la unidad de textura 0
+		glActiveTexture(GL_TEXTURE0);
+		// 2. Enlaza tu textura generada 'vasoTexture'
+		glBindTexture(GL_TEXTURE_2D, vasoTexture);
+		// 3. Comunícale al shader qué unidad de textura usar (unidad 0)
+		glUniform1i(glGetUniformLocation(lightingShader.Program, "texture_diffuse1"), 0);
 
 		// Se envía el parámetro de transparencia al shader
 		// se envía 0 para que no se aplique transparencia y 1 para que sí se aplique
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
+		
 	    Dog.Draw(lightingShader);
 		glDisable(GL_BLEND);  //Desactiva el canal alfa 
 		glBindVertexArray(0);
