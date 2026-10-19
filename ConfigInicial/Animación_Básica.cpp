@@ -49,7 +49,7 @@ bool keys[1024];
 bool firstMouse = true;
 // Light attributes
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-bool active;
+bool active;	// PARA SABER CUÁNDO SE ACTIVA O DESACTIVA LA ANIMACIÓN DE LA LUZ
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
@@ -107,8 +107,9 @@ float vertices[] = {
 
 glm::vec3 Light1 = glm::vec3(0);
 //Anim
-float rotBall = 0;
-bool AnimBall = false;
+float rotBall = 0;	// PARA CONOCER LA ROTACIÓN DE LA PELOTA
+float jumpBall = 0;	// PARA CONOCER EL SALTO DE LA PELOTA
+bool AnimBall = false;	// PARA SABER SI SE ACTIVA O DESACTIVA LA ANIMACIÓN DE LA PELOTA
 
 
 // Deltatime
@@ -197,6 +198,7 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 
+		// PARA AJUSTAR LA VELOCIDAD EN QUE TRANSCURREN LAS ANIMACIONES
 		// Calculate deltatime of current frame
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -297,7 +299,9 @@ int main()
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		Dog.Draw(lightingShader);
 
-		model = glm::mat4(1);
+
+		// SE CARGA EL MODELO DE LA PELOTA Y SE APLICA LA ANIMACIÓN
+		/*model = glm::mat4(1);
 		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -306,8 +310,27 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	    Ball.Draw(lightingShader); 
 		glDisable(GL_BLEND);  //Desactiva el canal alfa 
+		glBindVertexArray(0);*/
+
+
+		// SE CARGA EL MODELO DE LA PELOTA Y SE APLICA LA ANIMACIÓN
+		model = glm::mat4(1);
+		glEnable(GL_BLEND); // Activa la funcionalidad para trabajar el canal alfa
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Aplicamos la traslación vertical en el eje Y 
+		model = glm::translate(model, glm::vec3(0.0f, jumpBall, 0.0f));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
+
+		Ball.Draw(lightingShader);
+		glDisable(GL_BLEND); // Desactiva el canal alfa 
 		glBindVertexArray(0);
 	
+
+
+
 
 		// Also draw the lamp object, again binding the appropriate shader
 		lampShader.Use();
@@ -432,7 +455,7 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 
 	if (keys[GLFW_KEY_SPACE])
 	{
-		active = !active;
+		active = !active; //SE ACTIVA LA ANIMACIÓN DE LA LUZ, SI YA ESTABA ACTIVADA SE DESACTIVA
 		if (active)
 		{
 			Light1 = glm::vec3(1.0f, 1.0f, 0.0f);
@@ -449,17 +472,28 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		
 	}
 }
+
+
 void Animation() {
 	if (AnimBall)
 	{
-		rotBall += 0.2f;
+		//rotBall += 0.2f;
 		//printf("%f", rotBall);
+		
+		// Posición inicial (nariz del perro) y final (altura de la luz)
+		float minPosY = 0.0f; 
+		float maxPosY = pointLightPositions[0].y - 0.2f; // Altura de la fuente de luz (2.0f)
+
+		// Función seno para movimiento oscilatorio suave de subida y bajada (ida y vuelta)
+		float t = (sin(glfwGetTime() * 3.0f) + 1.0f) / 2.0f; // El 3.0f controla la velocidad
+		jumpBall = minPosY + (maxPosY - minPosY) * t;
 	}
 	else
 	{
 		//rotBall = 0.0f;
 	}
 }
+
 
 void MouseCallback(GLFWwindow *window, double xPos, double yPos)
 {
