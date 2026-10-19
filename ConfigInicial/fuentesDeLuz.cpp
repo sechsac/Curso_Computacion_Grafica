@@ -533,7 +533,7 @@ void DoMovement()
 	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
 	{
 		camera.ProcessKeyboard(FORWARD, deltaTime);
-
+   
 	}
 
 	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])

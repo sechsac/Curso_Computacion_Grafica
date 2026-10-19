@@ -1,6 +1,6 @@
 #version 330 core
 
-#define NUMBER_OF_POINT_LIGHTS 4
+#define NUMBER_OF_POINT_LIGHTS 1
 
 struct Material
 {
@@ -83,19 +83,9 @@ void main( )
     // Spot light
     result += CalcSpotLight( spotLight, norm, FragPos, viewDir );
  	
-    // Si transparency es 1 usa el canal alfa de la textura (.a); si es 0, usa 1.0 (opaco)
-    float alphaValue = (transparency == 1) ? texture(material.diffuse, TexCoords).a : 1.0f;
-
-    color = vec4(result, alphaValue);
-
-    // Solo hace discard si la transparencia está activa y el alfa es muy bajo
-    if(alphaValue < 0.1 && transparency == 1)
+    color = vec4( result,texture(material.diffuse, TexCoords).rgb );
+	  if(color.a < 0.1 && transparency==1)
         discard;
-
-
-    //color = vec4( result,texture(material.diffuse, TexCoords).rgb );
-	//  if(color.a < 0.1 && transparency==1)
-    //    discard;
 
 }
 
