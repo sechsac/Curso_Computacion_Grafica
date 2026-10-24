@@ -1,8 +1,7 @@
 // Práctica 10. Animación básica
 // Hernandez Castro Laura Isabel
-// Fecha: 22/octubre/2026
+// Fecha: 23/octubre/2026
 // No. de cuenta: 320293634
-
 
 
 #include <iostream>
@@ -24,7 +23,6 @@
 
 //Load Models
 #include "SOIL2/SOIL2.h"
-
 
 // Other includes
 #include "Shader.h"
@@ -49,7 +47,7 @@ bool keys[1024];
 bool firstMouse = true;
 // Light attributes
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-bool active;	// PARA SABER CUÁNDO SE ACTIVA O DESACTIVA LA ANIMACIÓN DE LA LUZ
+bool active;
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
@@ -106,23 +104,26 @@ float vertices[] = {
 glm::vec3 Light1 = glm::vec3(0);
 
 // Animaciones
-float jumpBall = 0;	// PARA CONOCER EL SALTO DE LA PELOTA
-float jumpDog = 0;  // PARA EL SALTO DEL PERRITO
-float dogX = 0;     // POSICIÓN X EN TRAYECTORIA CIRCULAR DEL PERRITO
-float dogZ = 0;     // POSICIÓN Z EN TRAYECTORIA CIRCULAR DEL PERRITO
-float dogRot = 0;   // ROTACIÓN PARA ORIENTAR AL PERRITO EN EL CÍRCULO
-bool AnimBall = false;	// PARA SABER SI SE ACTIVA O DESACTIVA LA ANIMACIÓN
+float jumpBall = 0;
+float ballX = 0;
+float ballZ = 0;
+float rotBall = 0;
+
+float jumpDog = 0;
+float dogX = 0;
+float dogZ = 0;
+float dogRot = 0;
+float dogPitch = 0; // NUEVA VARIABLE PARA EL CABECEO (INCLINACIÓN EN X)
+bool AnimBall = false;
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
 
 int main()
 {
-	// Init GLFW
 	glfwInit();
 
-	// Create a GLFWwindow object that we can use for GLFW's functions
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 10. Animacion basica - Hernandez Castro Laura Isabel", nullptr, nullptr);
 
 	if (nullptr == window)
@@ -135,11 +136,9 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
 
-	// Set the required callback functions
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCursorPosCallback(window, MouseCallback);
 
-	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
 	if (GLEW_OK != glewInit())
 	{
@@ -147,42 +146,35 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	// Define the viewport dimensions
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 
-	//models
 	Model Dog((char*)"Models/RedDog.obj");
 	Model Piso((char*)"Models/piso.obj");
 	Model Ball((char*)"Models/ball.obj");
 
-	// First, set the container's VAO (and VBO)
 	GLuint VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// Position attribute
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	// normal attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	// Set texture units
 	lightingShader.Use();
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.difuse"), 0);
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.specular"), 1);
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
-		// Calculate deltatime of current frame
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -191,16 +183,12 @@ int main()
 		DoMovement();
 		Animation();
 
-		// Clear the colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
 
-		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
-
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
 
 		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
@@ -238,18 +226,14 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.0f)));
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(18.0f)));
 
-		// Set material properties
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 5.0f);
 
-		// Create camera transformations
 		glm::mat4 view = camera.GetViewMatrix();
 
-		// Get the uniform locations
 		GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
 
-		// Pass the matrices to the shader
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -261,31 +245,32 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Piso.Draw(lightingShader);
 
-		// CARGA DEL MODELO DEL PERRITO CON TRAYECTORIA CIRCULAR Y SALTO
+		// CARGA DEL PERRITO (ÓRBITA, SALTO Y CABECEO EN EL EJE X)
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(dogX, jumpDog, dogZ)); // Posición circular en XZ y salto en Y
-		model = glm::rotate(model, dogRot, glm::vec3(0.0f, 1.0f, 0.0f)); // Orientación tangente al círculo
+		model = glm::translate(model, glm::vec3(dogX, jumpDog, dogZ));
+		model = glm::rotate(model, dogRot, glm::vec3(0.0f, 1.0f, 0.0f)); // Orientación en el círculo
+		model = glm::rotate(model, glm::radians(dogPitch), glm::vec3(1.0f, 0.0f, 0.0f)); // Inclinación / Cabeceo
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		Dog.Draw(lightingShader);
 
-		// CARGA DEL MODELO DE LA PELOTA Y ANIMACIÓN VERTICAL
+		// CARGA DE LA PELOTA
 		model = glm::mat4(1);
-		glEnable(GL_BLEND); // Activa la funcionalidad para trabajar el canal alfa
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// Aplicamos la traslación vertical en el eje Y 
-		model = glm::translate(model, glm::vec3(0.0f, jumpBall, 0.0f));
+		model = glm::translate(model, glm::vec3(ballX, jumpBall, ballZ));
+		//model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
 
 		Ball.Draw(lightingShader);
-		glDisable(GL_BLEND); // Desactiva el canal alfa 
+		glDisable(GL_BLEND);
 		glBindVertexArray(0);
 
-		// Also draw the lamp object
-		lampShader.Use();
+		// Dibujar lámpara
+		/*lampShader.Use();
 		modelLoc = glGetUniformLocation(lampShader.Program, "model");
 		viewLoc = glGetUniformLocation(lampShader.Program, "view");
 		projLoc = glGetUniformLocation(lampShader.Program, "projection");
@@ -295,67 +280,33 @@ int main()
 
 		model = glm::mat4(1);
 		model = glm::translate(model, pointLightPositions[0]);
-		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::scale(model, glm::vec3(0.2f));*/
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
 
-	// Terminate GLFW
 	glfwTerminate();
 	return 0;
 }
 
-// Moves/alters the camera positions based on user input
 void DoMovement()
 {
-	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
-	{
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	}
-	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
-	{
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	}
-	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
-	{
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	}
-	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
-	{
-		camera.ProcessKeyboard(RIGHT, deltaTime);
-	}
-	if (keys[GLFW_KEY_T])
-	{
-		pointLightPositions[0].x += 0.01f;
-	}
-	if (keys[GLFW_KEY_G])
-	{
-		pointLightPositions[0].x -= 0.01f;
-	}
-	if (keys[GLFW_KEY_Y])
-	{
-		pointLightPositions[0].y += 0.01f;
-	}
-	if (keys[GLFW_KEY_H])
-	{
-		pointLightPositions[0].y -= 0.01f;
-	}
-	if (keys[GLFW_KEY_U])
-	{
-		pointLightPositions[0].z -= 0.1f;
-	}
-	if (keys[GLFW_KEY_J])
-	{
-		pointLightPositions[0].z += 0.01f;
-	}
+	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP]) camera.ProcessKeyboard(FORWARD, deltaTime);
+	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN]) camera.ProcessKeyboard(BACKWARD, deltaTime);
+	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT]) camera.ProcessKeyboard(LEFT, deltaTime);
+	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (keys[GLFW_KEY_T]) pointLightPositions[0].x += 0.01f;
+	if (keys[GLFW_KEY_G]) pointLightPositions[0].x -= 0.01f;
+	if (keys[GLFW_KEY_Y]) pointLightPositions[0].y += 0.01f;
+	if (keys[GLFW_KEY_H]) pointLightPositions[0].y -= 0.01f;
+	if (keys[GLFW_KEY_U]) pointLightPositions[0].z -= 0.1f;
+	if (keys[GLFW_KEY_J]) pointLightPositions[0].z += 0.1f;
 }
 
-// Is called whenever a key is pressed/released via GLFW
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
@@ -365,27 +316,14 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	if (key >= 0 && key < 1024)
 	{
-		if (action == GLFW_PRESS)
-		{
-			keys[key] = true;
-		}
-		else if (action == GLFW_RELEASE)
-		{
-			keys[key] = false;
-		}
+		if (action == GLFW_PRESS) keys[key] = true;
+		else if (action == GLFW_RELEASE) keys[key] = false;
 	}
 
 	if (keys[GLFW_KEY_SPACE])
 	{
 		active = !active;
-		if (active)
-		{
-			Light1 = glm::vec3(1.0f, 1.0f, 0.0f);
-		}
-		else
-		{
-			Light1 = glm::vec3(0);
-		}
+		Light1 = active ? glm::vec3(1.0f, 1.0f, 0.0f) : glm::vec3(0);
 	}
 	if (keys[GLFW_KEY_N])
 	{
@@ -393,33 +331,58 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 	}
 }
 
-// ANIMACIONES COORDINADAS (TRAYECTORIA CIRCULAR Y SALTO)
+
+
 void Animation() {
 	if (AnimBall)
 	{
-		// 1. Trayectoria circular (órbita) para el perrito usando seno y coseno en el plano XZ
-		float angle = glfwGetTime() * 1.5f; // Controla la velocidad de avance en el círculo
-		float radius = 2.0f;                // Radio del círculo en el piso
+		float angle = glfwGetTime() * 1.5f;
+		float radius = 2.0f;
+
 		dogX = cos(angle) * radius;
 		dogZ = sin(angle) * radius;
-		dogRot = -angle;                    // Gira el cuerpo para que vaya orientado conforme avanza en el círculo
+		dogRot = -angle;
 
-		// 2. La pelota va de arriba a abajo usando función coseno
+		ballX = cos(angle + 0.18f) * radius;
+		ballZ = sin(angle + 0.18f) * radius;
+
+		// Movimiento vertical suave de la pelota (baja hasta la nariz: 0.4f)
 		float timeVal = glfwGetTime() * 3.0f;
-		jumpBall = 1.0f + cos(timeVal) * 1.0f; // Oscila verticalmente entre 0.0 y 2.0
+		jumpBall = 0.8f + cos(timeVal) * 0.6f;
 
-		// 3. Cuando la pelota baja y llega abajo (jumpBall cercano a 0.0), el perrito simula el brinco
-		jumpDog = (jumpBall < 0.3f) ? (0.3f - jumpBall) * 1.5f : 0.0f;
+		// SALTO Y CABECEO DEL PERRITO
+		// Con -cos(timeVal), la onda es positiva EXACTAMENTE cuando la pelota está abajo.
+		float impactWave = -cos(timeVal);
+
+		if (impactWave > 0.0f)
+		{
+			// Salto suave y parabólico
+			jumpDog = impactWave * 0.2f;
+
+			// Cabeceo hacia atrás y adelante acoplado al movimiento
+			dogPitch = sin(timeVal * 2.0f) * 15.0f * impactWave;
+		}
+		else
+		{
+			jumpDog = 0.0f;
+			dogPitch = 0.0f;
+		}
 	}
 	else
 	{
 		dogX = 0.0f;
 		dogZ = 0.0f;
 		dogRot = 0.0f;
+		dogPitch = 0.0f;
+		ballX = 0.0f;
+		ballZ = 0.0f;
+		rotBall = 0.0f;
 		jumpDog = 0.0f;
-		jumpBall = 0.0f;
+		jumpBall = 0.4f;
 	}
 }
+
+
 
 void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
