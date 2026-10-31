@@ -1,7 +1,7 @@
 // Práctica 11. Animación por máquina de estados
 // Hernández Castro Laura Isabel
 // No. de cuenta: 320293634
-// Fecha: 26/10/2026
+// Fecha: 30/10/2026
 
 
 #include <iostream>
@@ -215,6 +215,8 @@ int main()
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
+		glm::mat4 model(1);
+		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
 
 		// Calculate deltatime of current frame
 		GLfloat currentFrame = glfwGetTime();
@@ -234,7 +236,7 @@ int main()
 		glEnable(GL_DEPTH_TEST);
 
 		
-		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
+		
 		
 	
 
@@ -301,7 +303,7 @@ int main()
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-		glm::mat4 model(1);
+		
 
 	
 		
@@ -334,7 +336,7 @@ int main()
 		//Front Left Leg
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(0.112f, -0.044f, 0.074f));
-		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(-1.0f, 0.0f, 0.0f)); 
+		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(-1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		F_LeftLeg.Draw(lightingShader);
 		//Front Right Leg
@@ -345,8 +347,8 @@ int main()
 		F_RightLeg.Draw(lightingShader);
 		//Back Left Leg
 		model = modelTemp; 
-		model = glm::translate(model, glm::vec3(0.082f, -0.046, -0.218)); 
-		model = glm::rotate(model, glm::radians(RLegs), glm::vec3(1.0f, 0.0f, 0.0f)); 
+		model = glm::translate(model, glm::vec3(0.082f, -0.046, -0.218));
+		model = glm::rotate(model, glm::radians(RLegs), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); 
 		B_LeftLeg.Draw(lightingShader);
 		//Back Right Leg
@@ -525,91 +527,68 @@ void Animation() {
 	}
 
 	if (dogAnim == 1) {
-		float speed = 0.0015f; // Velocidad de avance
+		float speed = 0.001f; // Velocidad de avance
 
-		// FASES DE LA TRAYECTORIA (Cuadrado / Contorno)
+		// FASES DE LA TRAYECTORIA (Contorno con esquinas redondeadas)
 		switch (pathPhase) {
 		case 0: // Tramo 1: Avanzar recto en Z
-			if (dogPos.z < 2.0f) {
-				// Movimiento de patas 
-				if (!step) { 
-					RLegs += 0.4f; 
-					FLegs += 0.4f; 
-					head += 0.4f; 
-					tail += 0.4f; 
-					if (RLegs >= 15.0f) 
-						step = true; 
+			if (dogPos.z < 1.5f) {
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					RLegs -= 0.4f; 
-					FLegs -= 0.4f; 
-					head -= 0.4f; 
-					tail -= 0.4f; 
-					if (RLegs <= -15.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
-				// Avanzar en la dirección de la rotación actual
 				float rad = glm::radians(dogRot);
 				dogPos.z += speed * cos(rad);
 				dogPos.x += speed * sin(rad);
 			}
 			else {
-				targetDogRot = dogRot + 90.0f; // Giro de 90° izq
-				pathPhase = 1;
+				// Configuramos el objetivo de rotación sumando 90° de forma acumulativa
+				targetDogRot = dogRot + 90.0f;
+				pathPhase = 1; // Pasamos a la fase de curva
 			}
 			break;
 
-
-
-
-		case 1: // Giro 1 a la izquierda
+		case 1: // Curva 1: Giro suave de 90° con desplazamiento simultáneo
 			if (dogRot < targetDogRot) {
-				dogRot += 0.8f; // Suavidad del giro
-				// Mover levemente las patas para que no se vea rígido al girar en su sitio
-				if (!step) { 
-					FLegs += 0.2f; 
-					RLegs -= 0.2f; 
-					if (FLegs >= 5.0f) 
-						step = true; 
+				dogRot += 0.4f; // Velocidad de giro por frame (sin bucle for)
+
+				// Movimiento natural de caminata mientras gira la esquina
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					FLegs -= 0.2f; 
-					RLegs += 0.2f; 
-					if (FLegs <= -5.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
-				if (dogRot >= targetDogRot) { 
-					dogRot = targetDogRot; 
-					FLegs = 0.0f; 
-					RLegs = 0.0f; 
-					pathPhase = 2; 
+				// El perro avanza y curva al mismo tiempo hacia donde apunta su rotación actual
+				float curveSpeed = 0.005f;
+				float rad = glm::radians(dogRot);
+				dogPos.z += curveSpeed * cos(rad);
+				dogPos.x += curveSpeed * sin(rad);
+
+				if (dogRot >= targetDogRot) {
+					dogRot = targetDogRot;
+					pathPhase = 2; // Siguiente tramo recto
 				}
 			}
 			break;
-
-
-
-
 
 		case 2: // Tramo 2: Avanzar en la nueva dirección (eje X)
-			if (dogPos.x < 2.0f) {
-				if (!step) { 
-					RLegs += 0.4f; 
-					FLegs += 0.4f; 
-					head += 0.4f; 
-					tail += 0.4f; 
-					if (RLegs >= 15.0f) 
-						step = true; 
+			if (dogPos.x < 1.5f) {
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					RLegs -= 0.4f; 
-					FLegs -= 0.4f; 
-					head -= 0.4f; 
-					tail -= 0.4f; 
-					if (RLegs <= -15.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
 				float rad = glm::radians(dogRot);
@@ -622,54 +601,39 @@ void Animation() {
 			}
 			break;
 
-
-
-
-		case 3: // Giro 2 a la izquierda
+		case 3: // Curva 2: Giro suave con desplazamiento
 			if (dogRot < targetDogRot) {
-				dogRot += 0.8f;
-				if (!step) { 
-					FLegs += 0.2f; 
-					RLegs -= 0.2f; 
-					if (FLegs >= 5.0f) 
-						step = true; 
+				dogRot += 0.4f;
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					FLegs -= 0.2f; 
-					RLegs += 0.2f; 
-					if (FLegs <= -5.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
-				if (dogRot >= targetDogRot) { 
-					dogRot = targetDogRot; 
-					FLegs = 0.0f; 
-					RLegs = 0.0f; 
-					pathPhase = 4; }
+				float curveSpeed = 0.005f;
+				float rad = glm::radians(dogRot);
+				dogPos.z += curveSpeed * cos(rad);
+				dogPos.x += curveSpeed * sin(rad);
+
+				if (dogRot >= targetDogRot) {
+					dogRot = targetDogRot;
+					pathPhase = 4;
+				}
 			}
 			break;
 
-
-
-
-
 		case 4: // Tramo 3: Regresar en Z
-			if (dogPos.z > -2.0f) {
-				if (!step) { 
-					RLegs += 0.4f; 
-					FLegs += 0.4f; 
-					head += 0.4f; 
-					tail += 0.4f; 
-					if (RLegs >= 15.0f) 
-						step = true; 
+			if (dogPos.z > -1.5f) {
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					RLegs -= 0.4f; 
-					FLegs -= 0.4f; 
-					head -= 0.4f; 
-					tail -= 0.4f; 
-					if (RLegs <= -15.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
 				float rad = glm::radians(dogRot);
@@ -682,60 +646,39 @@ void Animation() {
 			}
 			break;
 
-
-
-
-
-		case 5: // Tramo 3: Regresar en Z
-			if (dogPos.z > -2.0f) {
+		case 5: // Curva 3: Giro suave con desplazamiento
+			if (dogRot < targetDogRot) {
+				dogRot += 0.4f;
 				if (!step) {
-					RLegs += 0.4f;
-					FLegs += 0.4f;
-					head += 0.4f;
-					tail += 0.4f;
-					if (RLegs >= 15.0f)
-						step = true;
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
 				else {
-					RLegs -= 0.4f;
-					FLegs -= 0.4f;
-					head -= 0.4f;
-					tail -= 0.4f;
-					if (RLegs <= -15.0f)
-						step = false;
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
+				float curveSpeed = 0.005f;
 				float rad = glm::radians(dogRot);
-				dogPos.z += speed * cos(rad);
-				dogPos.x += speed * sin(rad);
-			}
-			else {
-				targetDogRot = dogRot - 135.0f;
-				pathPhase = 6;
+				dogPos.z += curveSpeed * cos(rad);
+				dogPos.x += curveSpeed * sin(rad);
+
+				if (dogRot >= targetDogRot) {
+					dogRot = targetDogRot;
+					pathPhase = 6;
+				}
 			}
 			break;
 
-
-
-
-
-		case 6: // Tramo 4: Regresar al inicio en X
-			if (dogPos.x > -2.0f) {
-				if (!step) { 
-					RLegs += 0.4f; 
-					FLegs += 0.4f; 
-					head += 0.4f; 
-					tail += 0.4f; 
-					if (RLegs >= 15.0f) 
-						step = true; 
+		case 6: // Tramo 4: Regresar en X
+			if (dogPos.x > -1.5f) {
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
-				else { 
-					RLegs -= 0.4f; 
-					FLegs -= 0.4f; 
-					head -= 0.4f; 
-					tail -= 0.4f; 
-					if (RLegs <= -15.0f) 
-						step = false; 
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
 				float rad = glm::radians(dogRot);
@@ -743,46 +686,44 @@ void Animation() {
 				dogPos.x += speed * sin(rad);
 			}
 			else {
-				targetDogRot = dogRot + 90.0f;
+				targetDogRot = dogRot + 135.0f;
 				pathPhase = 7;
 			}
 			break;
 
-
-
-
-/*
-		case 7: // Giro final para completar el ciclo y alinearse al origen
+		case 7: // Curva de 135° con desplazamiento
 			if (dogRot < targetDogRot) {
-				dogRot += 0.8f;
-				if (dogRot >= targetDogRot) {
-					dogRot = targetDogRot;
-					dogAnim = 8; // Termina el ciclo completo y vuelve a reposo
-				}
-			}
-			break;*/
-
-
-
-
-
-		case 7: // Tramo 4: Regresar al inicio en X
-			if (dogPos.x > 0.0f) {
+				dogRot += 0.4f;
 				if (!step) {
-					RLegs += 0.4f;
-					FLegs += 0.4f;
-					head += 0.4f;
-					tail += 0.4f;
-					if (RLegs >= 15.0f)
-						step = true;
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
 				else {
-					RLegs -= 0.4f;
-					FLegs -= 0.4f;
-					head -= 0.4f;
-					tail -= 0.4f;
-					if (RLegs <= -15.0f)
-						step = false;
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
+				}
+
+				float curveSpeed = 0.005f;
+				float rad = glm::radians(dogRot);
+				dogPos.z += curveSpeed * cos(rad);
+				dogPos.x += curveSpeed * sin(rad);
+
+				if (dogRot >= targetDogRot) {
+					dogRot = targetDogRot;
+					pathPhase = 8;
+				}
+			}
+			break;
+
+		case 8: // Tramo hacia el centro (X < 0.0f)
+			if (dogPos.x < -0.5f) {
+				if (!step) {
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
+				}
+				else {
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
 				float rad = glm::radians(dogRot);
@@ -791,54 +732,35 @@ void Animation() {
 			}
 			else {
 				targetDogRot = dogRot - 45.0f;
-				pathPhase = 8;
+				pathPhase = 9;
 			}
 			break;
 
-
-/*
-		case 9: // Giro final para completar el ciclo y alinearse al origen
-			if (dogRot < targetDogRot) {
-				dogRot += 0.8f;
-				if (dogRot >= targetDogRot) {
-					dogRot = targetDogRot;
-					dogAnim = 10; 
-				}
-			}
-			break;*/
-
-
-
-		case 8: 
-			if (dogPos.x > 0.0f) {
+		case 9: // Curva final de ajuste (Giro de -45° con desplazamiento)
+			if (dogRot > targetDogRot) {
+				dogRot -= 0.4f;
 				if (!step) {
-					RLegs += 0.4f;
-					FLegs += 0.4f;
-					head += 0.4f;
-					tail += 0.4f;
-					if (RLegs >= 15.0f)
-						step = true;
+					RLegs += 0.4f; FLegs += 0.4f; head += 0.4f; tail += 0.4f;
+					if (RLegs >= 15.0f) step = true;
 				}
 				else {
-					RLegs -= 0.4f;
-					FLegs -= 0.4f;
-					head -= 0.4f;
-					tail -= 0.4f;
-					if (RLegs <= -15.0f)
-						step = false;
+					RLegs -= 0.4f; FLegs -= 0.4f; head -= 0.4f; tail -= 0.4f;
+					if (RLegs <= -15.0f) step = false;
 				}
 
+				float curveSpeed = 0.005f;
 				float rad = glm::radians(dogRot);
-				dogPos.z += speed * cos(rad);
-				dogPos.x += speed * sin(rad);
-			}
-			else {
-				targetDogRot = dogRot - 45.0f;
-				pathPhase = 0;
+				dogPos.z += curveSpeed * cos(rad);
+				dogPos.x += curveSpeed * sin(rad);
+
+				if (dogRot <= targetDogRot) {
+					dogRot = targetDogRot;
+					FLegs = 0.0f;
+					RLegs = 0.0f;
+					pathPhase = 0; // Reinicia el ciclo
+				}
 			}
 			break;
-
-
 		}
 	}
 }
